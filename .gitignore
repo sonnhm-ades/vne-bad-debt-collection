@@ -26,3 +26,5 @@ data_cleaning.log
 .idea/
 .DS_Store
 Thumbs.db
+*.backup
+*.tmp

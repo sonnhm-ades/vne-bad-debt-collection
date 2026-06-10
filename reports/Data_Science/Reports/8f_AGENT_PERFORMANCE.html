@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8F — Agent Performance & ARR Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<style>
+:root {
+    --bg: #0F172A;
+    --card: #1E293B;
+    --primary: #38BDF8;
+    --success: #10B981;
+    --danger: #EF4444;
+    --warn: #F59E0B;
+    --muted: #64748B;
+    --border: #334155;
+    --text: #F1F5F9;
+    --radius: 12px;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    margin: 0;
+}
+.header { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; }
+.header h1 { margin: 0 0 8px 0; font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+.header p { margin: 0; font-size: 13px; color: var(--muted); }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; position: relative; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); }
+.kpi-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--primary); border-radius: 0 0 var(--radius) var(--radius); }
+.kpi-card.kpi-success::after { background: var(--success); }
+.kpi-card.kpi-danger::after { background: var(--danger); }
+.kpi-card.kpi-warn::after { background: var(--warn); }
+.kpi-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+.kpi-value { font-size: 24px; font-weight: 800; line-height: 1.1; }
+.kpi-sub { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); margin-bottom: 0; }
+.tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 8px; flex-wrap: wrap; }
+.data-table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { background: #1E293B; padding: 10px 12px; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--border); text-align: left; white-space: nowrap; }
+.data-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.data-table tr:hover { background: rgba(56,189,248,0.05); }
+.tab-btn { background: transparent; color: var(--muted); border: none; padding: 10px 16px; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+.tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.tab-btn.active { background: var(--primary); color: #000; }
+.tab-content { display: none; animation: fadeIn 0.3s ease; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.alert-box { padding: 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; border-left: 4px solid; }
+.alert-danger { background: rgba(239, 68, 68, 0.1); border-left-color: var(--danger); color: #FCA595; }
+.alert-warn { background: rgba(245, 158, 11, 0.1); border-left-color: var(--warn); color: #FCD34D; }
+.alert-success { background: rgba(16, 185, 129, 0.1); border-left-color: var(--success); color: #6EE7B7; }
+        [data-theme="dark"] {
+            --background: #0F172A;
+            --card-bg: #1E293B;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border: #334155;
+            --primary-light: #38BDF8;
+        }
+        [data-theme="dark"] .tab-headers { background: #1E293B; }
+        [data-theme="dark"] .tab-btn:hover { background: #2E3B4E; color: #38BDF8; }
+        [data-theme="dark"] .tab-btn.active { background: #0F172A; color: #38BDF8; border-bottom-color: #38BDF8; }
+        [data-theme="dark"] .data-table th { background: #1E293B; color: var(--text-main); }
+        [data-theme="dark"] .data-table tr:hover { background: #2E3B4E; }
+        [data-theme="dark"] .rec-card { background: #1E293B; border-color: var(--border); }
+        [data-theme="dark"] .rec-card h4 { color: #38BDF8; }
+        [data-theme="dark"] .rec-card p, [data-theme="dark"] .rec-card li { color: #CBD5E1; }
+        [data-theme="dark"] .callout.callout-info { background-color: rgba(59,130,246,0.15); color: #93C5FD; border-color: #3B82F6; }
+        [data-theme="dark"] .callout.callout-success { background-color: rgba(16,185,129,0.15); color: #6EE7B7; border-color: #10B981; }
+        [data-theme="dark"] .callout.callout-warning { background-color: rgba(245,158,11,0.15); color: #FCD34D; border-color: #F59E0B; }
+        [data-theme="dark"] .callout.callout-danger { background-color: rgba(239,68,68,0.15); color: #FCA5A5; border-color: #EF4444; }
+
+
+        /* ===================================================================
+           VNE Light Mode — Injected for theme sync
+           Activates when parent sends 'light' theme (data-theme is removed)
+           =================================================================== */
+        :root:not([data-theme="dark"]) {
+            /* Variable Overrides */
+            --bg: #F8FAFC !important;
+            --card: #FFFFFF !important;
+            --text: #0F172A !important;
+            --border: #E2E8F0 !important;
+            --muted: #64748B !important;
+            --primary: #2563EB !important;
+            --accent: #2563EB !important;
+            
+            --background: #F8FAFC !important;
+            --card-bg: #FFFFFF !important;
+            --text-main: #0F172A !important;
+            --text-muted: #64748B !important;
+            
+            --success: #10B981 !important;
+            --danger: #EF4444 !important;
+            --warning: #F59E0B !important;
+            --warn: #F59E0B !important;
+            --info: #06B6D4 !important;
+        }
+
+        /* Force light mode backgrounds overriding native dark CSS */
+        html:not([data-theme="dark"]) body {
+            background-color: var(--bg) !important;
+            color: var(--text) !important;
+        }
+
+        html:not([data-theme="dark"]) .card,
+        html:not([data-theme="dark"]) .kpi-card,
+        html:not([data-theme="dark"]) .section-card,
+        html:not([data-theme="dark"]) .chart-card,
+        html:not([data-theme="dark"]) .metric-card,
+        html:not([data-theme="dark"]) .insight-card,
+        html:not([data-theme="dark"]) .stat-card,
+        html:not([data-theme="dark"]) .summary-card,
+        html:not([data-theme="dark"]) .detail-card,
+        html:not([data-theme="dark"]) .analysis-card,
+        html:not([data-theme="dark"]) .header,
+        html:not([data-theme="dark"]) [class*="-card"],
+        html:not([data-theme="dark"]) [class*="card-"] {
+            background-color: var(--card) !important;
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+        }
+
+        html:not([data-theme="dark"]) h1,
+        html:not([data-theme="dark"]) h2,
+        html:not([data-theme="dark"]) h3,
+        html:not([data-theme="dark"]) h4,
+        html:not([data-theme="dark"]) h5,
+        html:not([data-theme="dark"]) h6 {
+            color: var(--text) !important;
+        }
+
+        html:not([data-theme="dark"]) p,
+        html:not([data-theme="dark"]) span:not([class*="badge"]):not([class*="alert"]):not([class*="kpi"]),
+        html:not([data-theme="dark"]) label {
+            color: var(--text) !important;
+        }
+
+        html:not([data-theme="dark"]) small, 
+        html:not([data-theme="dark"]) .text-muted,
+        html:not([data-theme="dark"]) .kpi-label,
+        html:not([data-theme="dark"]) .kpi-sub { 
+            color: var(--muted) !important; 
+        }
+
+        /* Tables */
+        html:not([data-theme="dark"]) table { border-color: var(--border) !important; }
+        html:not([data-theme="dark"]) th {
+            background-color: rgba(37,99,235,0.05) !important;
+            color: #1E3A8A !important;
+            border-color: var(--border) !important;
+        }
+        html:not([data-theme="dark"]) td {
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+        }
+        html:not([data-theme="dark"]) tr { border-color: var(--border) !important; }
+        html:not([data-theme="dark"]) tr:nth-child(even) { background-color: rgba(248,250,252,0.8) !important; }
+        html:not([data-theme="dark"]) tr:hover { background-color: rgba(37,99,235,0.05) !important; }
+
+        /* Section headers & dividers */
+        html:not([data-theme="dark"]) .section-header,
+        html:not([data-theme="dark"]) .header-section,
+        html:not([data-theme="dark"]) .tabs,
+        html:not([data-theme="dark"]) .divider,
+        html:not([data-theme="dark"]) hr {
+            border-color: var(--border) !important;
+        }
+
+        /* Tabs / navigation */
+        html:not([data-theme="dark"]) .tab-btn,
+        html:not([data-theme="dark"]) .nav-tab,
+        html:not([data-theme="dark"]) .tab-link {
+            color: var(--muted) !important;
+            background-color: transparent !important;
+        }
+        html:not([data-theme="dark"]) .tab-btn:hover,
+        html:not([data-theme="dark"]) .nav-tab:hover,
+        html:not([data-theme="dark"]) .tab-link:hover {
+            color: var(--text) !important;
+            background-color: rgba(0,0,0,0.05) !important;
+        }
+        html:not([data-theme="dark"]) .tab-btn.active,
+        html:not([data-theme="dark"]) .nav-tab.active,
+        html:not([data-theme="dark"]) .tab-link.active {
+            color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            background-color: rgba(37,99,235,0.08) !important;
+        }
+
+        /* Input / form / footer */
+        html:not([data-theme="dark"]) input,
+        html:not([data-theme="dark"]) select,
+        html:not([data-theme="dark"]) textarea,
+        html:not([data-theme="dark"]) .footer {
+            background-color: var(--card) !important;
+            color: var(--text) !important;
+            border-color: var(--border) !important;
+        }
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>8F — HIỆU SUẤT NHÂN VIÊN VÀ FEEDBACK LOOP (ARR)</h1>
+    <p>Đánh giá hiệu suất đại lý/chi nhánh thông qua chỉ số Residual (sau khi chuẩn hoá độ khó hồ sơ) và tự động tạo Feedback điều chỉnh chiến lược theo ARR — VNE Risk Management 2026</p>
+</div>
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-label">Tổng Số Chi Nhánh</div>
+        <div class="kpi-value">3</div>
+        <div class="kpi-sub">Đạt chuẩn khối lượng phân tích</div>
+    </div>
+    <div class="kpi-card kpi-success">
+        <div class="kpi-label">Tổng Số Agent Cấp Cao</div>
+        <div class="kpi-value">50</div>
+        <div class="kpi-sub">Nhân viên vượt mốc >30 hồ sơ</div>
+    </div>
+    <div class="kpi-card kpi-warn">
+        <div class="kpi-label">Chi Nhánh Dẫn Đầu</div>
+        <div class="kpi-value" style="font-size:18px;">GĐ</div>
+        <div class="kpi-sub">Vượt kỳ vọng -42.70%</div>
+    </div>
+    <div class="kpi-card kpi-danger">
+        <div class="kpi-label">ARR Trigger Status</div>
+        <div class="kpi-value">ACTIVE</div>
+        <div class="kpi-sub">Giới hạn thời gian (Litigation DPD): 30 ngày</div>
+    </div>
+</div>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="openTab(event, 'tab1')">1. Hiệu Suất Chi Nhánh</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab2')">2. Bảng Xếp Hạng Agent</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab3')">3. Nhận Định & Feedback Loop</button>
+</div>
+
+<div id="tab1" class="tab-content active">
+    <div class="chart-card">
+        <div>                            <div id="c68e8dce-8871-4cd3-a0f7-0998769824c2" class="plotly-graph-div" style="height:450px; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("c68e8dce-8871-4cd3-a0f7-0998769824c2")) {                    Plotly.newPlot(                        "c68e8dce-8871-4cd3-a0f7-0998769824c2",                        [{"marker":{"color":["#E53935","#E53935","#E53935"]},"text":["-42.699%","-46.698%","-49.063%"],"textposition":"outside","x":["GĐ","ĐÀ NẴNG","HỒ CHÍ MINH"],"xaxis":"x","y":[-42.699,-46.698,-49.063],"yaxis":"y","type":"bar"},{"domain":{"x":[0.55,1.0],"y":[0.0,1.0]},"hole":0.4,"labels":["KHO","HỒ CHÍ MINH","ĐÀ NẴNG","GĐ","CLOSE CASE","TỐ TỤNG","NGHI GIAN LẬN"],"textinfo":"label+percent","values":[105650,41194,7165,868,153,53,1],"type":"pie"}],                        {"annotations":[{"font":{"size":16},"showarrow":false,"text":"Hiệu Suất Chi Nhánh (Residual %)","x":0.225,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Phân Bổ Hồ Sơ Theo Chi Nhánh","x":0.775,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"height":450,"margin":{"b":50,"l":40,"r":40,"t":50},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","shapes":[{"line":{"color":"#FDD835","dash":"dash"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":0,"y1":0,"yref":"y"}],"showlegend":false,"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.45]},"yaxis":{"anchor":"x","domain":[0.0,1.0]}},                        {"responsive": true}                    )                };                            </script>        </div>
+    </div>
+</div>
+
+<div id="tab2" class="tab-content">
+    <div class="chart-card">
+        <div>                            <div id="9efc49b8-4286-4da6-a732-7e10dd9d6788" class="plotly-graph-div" style="height:500px; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("9efc49b8-4286-4da6-a732-7e10dd9d6788")) {                    Plotly.newPlot(                        "9efc49b8-4286-4da6-a732-7e10dd9d6788",                        [{"marker":{"color":"#43A047"},"orientation":"h","text":["-46.468%","-46.443%","-46.001%","-45.987%","-45.319%","-45.134%","-44.750%","-44.409%","-44.391%","-44.087%","-43.764%","-43.552%","-43.368%","-41.210%","-12.211%"],"textposition":"outside","x":[-46.468,-46.443,-46.001,-45.987,-45.319,-45.134,-44.75,-44.409,-44.391,-44.087,-43.764,-43.552,-43.368,-41.21,-12.211],"xaxis":"x","y":["Sanglt","Vuint","Chaunn","Linhltm","Duypt","Sonht","Quilth","Vynn","Dongpn","Anttt","Taitnt","Huongttt","Huyvd","Quangnv","CLOSE CASE"],"yaxis":"y","type":"bar"},{"marker":{"color":"#1565C0"},"text":["2.42%","4.27%","3.36%"],"textposition":"outside","x":["GĐ","ĐÀ NẴNG","HỒ CHÍ MINH"],"xaxis":"x2","y":[2.42,4.27,3.36],"yaxis":"y2","type":"bar"}],                        {"annotations":[{"font":{"size":16},"showarrow":false,"text":"Top 15 Super Agent (Risk-adjusted Residual)","x":0.225,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Tỷ Lệ Thu Hồi Thực Tế vs Dự Báo (Chi Nhánh)","x":0.775,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"height":500,"margin":{"b":50,"l":40,"r":40,"t":50},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","showlegend":false,"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.45]},"yaxis":{"anchor":"x","domain":[0.0,1.0]},"xaxis2":{"anchor":"y2","domain":[0.55,1.0]},"yaxis2":{"anchor":"x2","domain":[0.0,1.0]}},                        {"responsive": true}                    )                };                            </script>        </div>
+    </div>
+</div>
+
+<div id="tab3" class="tab-content">
+    <div class="chart-card" style="padding: 30px;">
+        <h3 style="margin-top:0; color:var(--primary); margin-bottom: 24px;">💡 Đánh Giá Hiệu Quả Thu Hồi (Risk-adjusted)</h3>
+        
+    <div class="alert-box alert-success">
+        <strong>🟢 Chi nhánh dẫn đầu (GĐ):</strong> Hiệu suất thực tế vượt kỳ vọng -42.699%. Chi nhánh này đang xử lý hồ sơ khó rất tốt.
+    </div>
+        <div class="alert-box alert-danger">
+            <strong>🔴 Chi nhánh tụt hậu (HỒ CHÍ MINH):</strong> Hiệu suất thấp hơn kỳ vọng -49.063%. Cần kiểm tra lại chất lượng kịch bản call và nghiệp vụ nhân sự.
+        </div>
+    <div class="alert-box alert-warn">
+        <strong>📊 Thống kê ý nghĩa (ANOVA):</strong> ANOVA F=81.44, p=0.0000 → Sự khác biệt CÓ ý nghĩa thống kê
+    </div>
+        <div class="alert-box alert-danger">
+            <strong>⚠️ ARR Feedback Triggered:</strong> Cụm ['Cụm 1', 'Cụm 2', 'Cụm 4'] có ARR thực tế < 0.5%. Đã xuất lệnh điều chỉnh DPD leo thang sớm (early_litigation_dpd) xuống 30 ngày.
+        </div>
+    </div>
+</div>
+
+<script>
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+    }
+    tablinks = document.getElementsByClassName("tab-btn");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+    window.dispatchEvent(new Event('resize'));
+}
+
+// Theme sync listener (f-string format)
+(function() {
+    function updatePlotlyTheme(isDark) {
+        const textCol = isDark ? '#F1F5F9' : '#0F172A';
+        const gridCol = isDark ? '#334155' : '#E2E8F0';
+        const titleCol = isDark ? '#94A3B8' : '#64748B';
+        
+        document.querySelectorAll('.plotly-graph-div').forEach(div => {
+            try {
+                Plotly.relayout(div, {
+                    'paper_bgcolor': 'rgba(0,0,0,0)',
+                    'plot_bgcolor': 'rgba(0,0,0,0)',
+                    'font.color': textCol,
+                    'title.font.color': titleCol,
+                    'xaxis.gridcolor': gridCol,
+                    'yaxis.gridcolor': gridCol,
+                    'xaxis.tickfont.color': textCol,
+                    'yaxis.tickfont.color': textCol,
+                    'xaxis.zerolinecolor': gridCol,
+                    'yaxis.zerolinecolor': gridCol
+                });
+            } catch(e) {}
+        });
+    }
+
+    const theme = localStorage.getItem('vne_theme');
+    const initDark = (theme === 'dark');
+    if (initDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    
+    // Listen for theme sync messages
+    window.addEventListener('message', function(e) {
+        if (e.data && typeof e.data.theme === 'string') {
+            const isDark = (e.data.theme === 'dark');
+            if (isDark) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            setTimeout(() => {
+                updatePlotlyTheme(isDark);
+                window.dispatchEvent(new Event('resize'));
+            }, 50);
+        }
+    });
+    
+    // Request initial theme
+    try {
+        window.parent.postMessage({ type: 'request_theme' }, '*');
+    } catch(e) {}
+    
+    // Initial plotly theme adjustment on DOMContentLoaded
+    window.addEventListener('DOMContentLoaded', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTimeout(() => { updatePlotlyTheme(isDark); }, 500);
+    });
+})();
+</script>
+</body>
+</html>

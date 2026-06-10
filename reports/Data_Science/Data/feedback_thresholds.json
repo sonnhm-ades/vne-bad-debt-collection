@@ -1,0 +1,15 @@
+{
+  "early_litigation_dpd": 30,
+  "triggered_clusters": [
+    "Cụm 1",
+    "Cụm 2",
+    "Cụm 4"
+  ],
+  "arr_snapshot": {
+    "Cụm 1": 1e-06,
+    "Cụm 2": 0.0,
+    "Cụm 3": 0.348153,
+    "Cụm 4": 0.0
+  },
+  "threshold": 0.005
+}

@@ -1,0 +1,37 @@
+1. Nhóm trạng thái liên hệ (Gọi được hoặc Không gọi được)
+NCON: Điện thoại khách hàng không liên lạc được.
+
+CBACK: Máy bận / Điện thoại reo nhưng không nghe máy / Bắt máy nhưng không trả lời / Khách hàng hẹn gọi lại sau.
+
+NSP: Gọi nhầm số / Không quen ai tên đó / Số điện thoại đã đổi chủ thuê bao.
+
+LM: Để lại thông tin liên hệ cho người tham chiếu (Reference).
+
+2. Nhóm hoàn cảnh đặc biệt của Khách hàng (NCAP)
+NCAP (Chung): Xác định được khách hàng đang đi tù / trại cai nghiện / bị tạm giam.
+
+(Các lý do đi kèm trong nhóm này):
+
+Khách hàng hiện tại không có khả năng thanh toán.
+
+Khách hàng đang thất nghiệp.
+
+Khách hàng kinh doanh/buôn bán phá sản.
+
+Khách hàng đã chết.
+
+Khách hàng đang bệnh nặng / tai nạn / người thân bị bệnh.
+
+3. Nhóm tiến độ xử lý và Cam kết
+PTP (Promise to Pay): Khách hàng hứa/cam kết sẽ thanh toán.
+
+BPTP (Broken Promise to Pay): Khách hàng thất hứa (đã hẹn nhưng không thanh toán).
+
+PAID: Khách hàng đã thanh toán tiền.
+
+NEGO (Negotiation): Đang đàm phán với khách hàng / trao đổi liên hệ thanh toán nhưng chưa chốt được ngày thanh toán cụ thể.
+
+4. Nhóm từ chối / Kháng cự / Pháp lý
+NIOP: Khách hàng từ chối thanh toán / Người thân không hợp tác / Bị gian lận tiền, lãi suất... HOẶC đang tiến hành khởi kiện khách hàng ra cơ quan pháp lý.
+
+FRAUD: Hồ sơ giả mạo (Khách hàng thật sự không vay tiền của tổ chức tín dụng - ví dụ trong bảng có nhắc tới PruFCo/SVFC).

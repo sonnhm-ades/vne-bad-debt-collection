@@ -1,0 +1,104 @@
+Unique sorted months: ['THÁNG 01.26', 'THÁNG 02.26', 'THÁNG 03.26']
+Latest month: THÁNG 03.26, Previous month: THÁNG 02.26
+Total unique loans in THÁNG 03.26: 92884
+T0 (Touched): 34539 (37.2%), Never Touched: 58345
+Ring 1 T0: 34539
+Ring 2 T2+: 21451
+Ring 3 T3+: 3707
+Ring 4 T4+: 1299
+Ring 5 T5: 1005
+All loans in either month: 137600
+
+Top transitions:
+CHƯA TÁC ĐỘNG -> CBACK: 13921 dossiers, weight: 414365281633.16
+CHƯA TÁC ĐỘNG -> NCON: 9851 dossiers, weight: 330641769321.85
+CBACK -> CHƯA TÁC ĐỘNG: 4724 dossiers, weight: 134851559395.0
+CBACK -> CBACK: 3185 dossiers, weight: 106935588149.67
+NCON -> CHƯA TÁC ĐỘNG: 1876 dossiers, weight: 59831775125.88
+NCON -> NCON: 1034 dossiers, weight: 36456914596.35
+CHƯA TÁC ĐỘNG -> NSP: 1019 dossiers, weight: 35105542550.4
+CBACK -> NCON: 924 dossiers, weight: 28984295927.0
+CHƯA TÁC ĐỘNG -> NEGO: 714 dossiers, weight: 22277072043.34
+CHƯA TÁC ĐỘNG -> NIOP: 640 dossiers, weight: 18457993537.35
+NCON -> CBACK: 406 dossiers, weight: 10998201090.51
+PTP -> PAID: 307 dossiers, weight: 8566902644.0
+NEGO -> NEGO: 294 dossiers, weight: 9986669773.0
+PAID -> PAID: 262 dossiers, weight: 7573988942.0
+CHƯA TÁC ĐỘNG -> PAID: 256 dossiers, weight: 6940849103.22
+NSP -> CHƯA TÁC ĐỘNG: 225 dossiers, weight: 6607052506.0
+CBACK -> NIOP: 186 dossiers, weight: 5201364970.62
+CHƯA TÁC ĐỘNG -> PTP: 172 dossiers, weight: 3414092041.0
+NIOP -> CHƯA TÁC ĐỘNG: 130 dossiers, weight: 3780035788.0
+NIOP -> NIOP: 108 dossiers, weight: 3541258721.0
+PTP -> PTP: 95 dossiers, weight: 2455164458.0
+CBACK -> PAID: 91 dossiers, weight: 2658051757.0
+CHƯA TÁC ĐỘNG -> NCAP: 84 dossiers, weight: 1646343610.0
+PTP -> BPTP: 74 dossiers, weight: 2003532232.0
+NSP -> NSP: 71 dossiers, weight: 2697141619.0
+NEGO -> CHƯA TÁC ĐỘNG: 68 dossiers, weight: 1798384347.0
+NIOP -> CBACK: 66 dossiers, weight: 2103578766.0
+NEGO -> PAID: 62 dossiers, weight: 1872823617.0
+NIOP -> NCON: 58 dossiers, weight: 1811931065.0
+CBACK -> NSP: 55 dossiers, weight: 1685084330.0
+NEGO -> CBACK: 53 dossiers, weight: 1367631864.0
+CBACK -> NEGO: 51 dossiers, weight: 1687065646.0
+NCON -> NIOP: 43 dossiers, weight: 1777629931.0
+NSP -> CBACK: 42 dossiers, weight: 1162550714.0
+NEGO -> NIOP: 31 dossiers, weight: 963638109.0
+KK/ĐXKK -> KK/ĐXKK: 30 dossiers, weight: 1817407002.0
+NSP -> NCON: 30 dossiers, weight: 870725543.0
+PAID -> CHƯA TÁC ĐỘNG: 29 dossiers, weight: 603522430.0
+PTP -> NEGO: 25 dossiers, weight: 656094776.0
+PTP -> CHƯA TÁC ĐỘNG: 23 dossiers, weight: 288775004.0
+NCON -> NSP: 22 dossiers, weight: 697557453.0
+CHƯA TÁC ĐỘNG -> LM: 21 dossiers, weight: 637056312.0
+NCAP -> CHƯA TÁC ĐỘNG: 20 dossiers, weight: 609690034.0
+PTP -> CBACK: 20 dossiers, weight: 477130123.0
+PAID -> BPTP: 19 dossiers, weight: 469024108.0
+CHƯA TÁC ĐỘNG -> BPTP: 19 dossiers, weight: 380990125.0
+BPTP -> PAID: 17 dossiers, weight: 407010952.0
+NEGO -> NCON: 15 dossiers, weight: 406854706.0
+NCON -> NEGO: 13 dossiers, weight: 332731350.0
+BPTP -> BPTP: 11 dossiers, weight: 222468832.0
+PAID -> CBACK: 11 dossiers, weight: 282983330.0
+CBACK -> NCAP: 11 dossiers, weight: 336912060.0
+CBACK -> PTP: 11 dossiers, weight: 418653264.0
+NSP -> NIOP: 10 dossiers, weight: 342091715.0
+PAID -> PTP: 9 dossiers, weight: 274773914.0
+NEGO -> BPTP: 9 dossiers, weight: 161802782.0
+LM -> CHƯA TÁC ĐỘNG: 8 dossiers, weight: 281587229.0
+PAID -> NEGO: 7 dossiers, weight: 227323408.0
+NCON -> PAID: 7 dossiers, weight: 207982940.0
+NEGO -> PTP: 6 dossiers, weight: 108166976.0
+BPTP -> CHƯA TÁC ĐỘNG: 6 dossiers, weight: 120959283.0
+BPTP -> CBACK: 6 dossiers, weight: 106245707.0
+NSP -> NEGO: 5 dossiers, weight: 45595589.0
+CBACK -> BPTP: 5 dossiers, weight: 147421539.0
+BPTP -> NEGO: 4 dossiers, weight: 80767056.0
+NCAP -> CBACK: 4 dossiers, weight: 141308616.0
+CBACK -> LM: 4 dossiers, weight: 80077716.0
+NCAP -> NCAP: 3 dossiers, weight: 137388846.0
+BPTP -> NCON: 2 dossiers, weight: 42289425.0
+NCON -> NCAP: 2 dossiers, weight: 227472037.0
+NCON -> LM: 2 dossiers, weight: 37147341.0
+NCAP -> NCON: 2 dossiers, weight: 54029805.0
+NSP -> PAID: 2 dossiers, weight: 44105052.0
+LM -> LM: 2 dossiers, weight: 111887452.0
+BPTP -> PTP: 1 dossiers, weight: 17215318.0
+NCAP -> BPTP: 1 dossiers, weight: 29534497.0
+PTP -> NIOP: 1 dossiers, weight: 36140648.0
+LM -> NCON: 1 dossiers, weight: 31000000.0
+PTP -> NCON: 1 dossiers, weight: 18896240.0
+PTP -> NCAP: 1 dossiers, weight: 42893754.0
+NIOP -> NCAP: 1 dossiers, weight: 47600676.0
+BPTP -> NIOP: 1 dossiers, weight: 83589334.0
+NEGO -> NSP: 1 dossiers, weight: 33047690.0
+CHƯA TÁC ĐỘNG -> FRAUD: 1 dossiers, weight: 43000000.0
+NIOP -> NSP: 1 dossiers, weight: 23973312.0
+NIOP -> PAID: 1 dossiers, weight: 23297336.0
+PAID -> NCON: 1 dossiers, weight: 80978461.0
+CBACK -> KK/ĐXKK: 1 dossiers, weight: 7804862.0
+NEGO -> NCAP: 1 dossiers, weight: 20000000.0
+LM -> CBACK: 1 dossiers, weight: 94117162.0
+NIOP -> BPTP: 1 dossiers, weight: 25096982.0
+NSP -> NCAP: 1 dossiers, weight: 32052403.0

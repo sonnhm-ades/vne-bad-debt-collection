@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8D — Geographic Residual Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<style>
+:root {
+    --bg: #F1F5F9; --card: #F8FAFC; --primary: #0F172A; --success: #10B981;
+    --danger: #EF4444; --warn: #F59E0B; --muted: #64748B; --border: #E2E8F0;
+    --text: #0F172A; --radius: 12px;
+}
+[data-theme="dark"] {
+    --bg: #0F172A; --card: #1E293B; --primary: #38BDF8; --border: #334155;
+    --text: #F1F5F9; --muted: #94A3B8;
+}
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; margin: 0; }
+.header { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; }
+.header h1 { margin: 0 0 8px 0; font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+.header p { margin: 0; font-size: 13px; color: var(--muted); }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; position: relative; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); }
+.kpi-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--primary); border-radius: 0 0 var(--radius) var(--radius); }
+.kpi-card.kpi-success::after { background: var(--success); }
+.kpi-card.kpi-danger::after { background: var(--danger); }
+.kpi-card.kpi-warn::after { background: var(--warn); }
+.kpi-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+.kpi-value { font-size: 24px; font-weight: 800; line-height: 1.1; }
+.kpi-sub { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); }
+.tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.tab-btn { background: transparent; color: var(--muted); border: none; padding: 10px 16px; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+.tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.tab-btn.active { background: var(--primary); color: #000; }
+.tab-content { display: none; animation: fadeIn 0.3s ease; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.alert-box { padding: 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; border-left: 4px solid; }
+.alert-danger { background: rgba(239, 68, 68, 0.1); border-left-color: var(--danger); color: #FCA595; }
+.alert-warn { background: rgba(245, 158, 11, 0.1); border-left-color: var(--warn); color: #FCD34D; }
+.alert-success { background: rgba(16, 185, 129, 0.1); border-left-color: var(--success); color: #6EE7B7; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   VNE Light Mode — injected by 8g dashboard theme sync
+   Activates when parent sends 'light' theme (data-theme is removed)
+   ═══════════════════════════════════════════════════════════════════ */
+:root:not([data-theme="dark"]) {
+    /* 8g/8f style variables */
+    --bg: #F8FAFC !important;
+    --card: #FFFFFF !important;
+    --text: #0F172A !important;
+    --border: #E2E8F0 !important;
+    --muted: #64748B !important;
+    --primary: #2563EB !important;
+    --accent: #2563EB !important;
+    
+    /* 8b/7d style variables */
+    --background: #F8FAFC !important;
+    --card-bg: #FFFFFF !important;
+    --text-main: #0F172A !important;
+    --text-muted: #64748B !important;
+    
+    /* shared */
+    --success: #10B981 !important;
+    --danger: #EF4444 !important;
+    --warning: #F59E0B !important;
+    --warn: #F59E0B !important;
+    --info: #06B6D4 !important;
+}
+
+/* Force light mode backgrounds overriding native dark CSS */
+html:not([data-theme="dark"]) body {
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+}
+
+html:not([data-theme="dark"]) .card,
+html:not([data-theme="dark"]) .kpi-card,
+html:not([data-theme="dark"]) .section-card,
+html:not([data-theme="dark"]) .chart-card,
+html:not([data-theme="dark"]) .metric-card,
+html:not([data-theme="dark"]) .insight-card,
+html:not([data-theme="dark"]) .stat-card,
+html:not([data-theme="dark"]) .summary-card,
+html:not([data-theme="dark"]) .detail-card,
+html:not([data-theme="dark"]) .analysis-card,
+html:not([data-theme="dark"]) .header,
+html:not([data-theme="dark"]) [class*="-card"],
+html:not([data-theme="dark"]) [class*="card-"] {
+    background-color: var(--card) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+html:not([data-theme="dark"]) h1,
+html:not([data-theme="dark"]) h2,
+html:not([data-theme="dark"]) h3,
+html:not([data-theme="dark"]) h4,
+html:not([data-theme="dark"]) h5,
+html:not([data-theme="dark"]) h6 {
+    color: var(--text) !important;
+}
+
+html:not([data-theme="dark"]) p,
+html:not([data-theme="dark"]) span:not([class*="badge"]):not([class*="alert"]):not([class*="kpi"]),
+html:not([data-theme="dark"]) label {
+    color: var(--text) !important;
+}
+
+html:not([data-theme="dark"]) small, 
+html:not([data-theme="dark"]) .text-muted,
+html:not([data-theme="dark"]) .kpi-label,
+html:not([data-theme="dark"]) .kpi-sub { 
+    color: var(--muted) !important; 
+}
+
+/* ── Tables ── */
+html:not([data-theme="dark"]) table { border-color: var(--border) !important; }
+html:not([data-theme="dark"]) th {
+    background-color: rgba(37,99,235,0.05) !important;
+    color: #1E3A8A !important;
+    border-color: var(--border) !important;
+}
+html:not([data-theme="dark"]) td {
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+html:not([data-theme="dark"]) tr { border-color: var(--border) !important; }
+html:not([data-theme="dark"]) tr:nth-child(even) { background-color: rgba(248,250,252,0.8) !important; }
+html:not([data-theme="dark"]) tr:hover { background-color: rgba(37,99,235,0.05) !important; }
+
+/* ── Section headers & dividers ── */
+html:not([data-theme="dark"]) .section-header,
+html:not([data-theme="dark"]) .header-section,
+html:not([data-theme="dark"]) .tabs,
+html:not([data-theme="dark"]) .divider,
+html:not([data-theme="dark"]) hr {
+    border-color: var(--border) !important;
+}
+
+/* ── Tabs / navigation ── */
+html:not([data-theme="dark"]) .tab-btn,
+html:not([data-theme="dark"]) .nav-tab,
+html:not([data-theme="dark"]) .tab-link {
+    color: var(--muted) !important;
+    background-color: transparent !important;
+}
+html:not([data-theme="dark"]) .tab-btn:hover,
+html:not([data-theme="dark"]) .nav-tab:hover,
+html:not([data-theme="dark"]) .tab-link:hover {
+    color: var(--text) !important;
+    background-color: rgba(0,0,0,0.05) !important;
+}
+html:not([data-theme="dark"]) .tab-btn.active,
+html:not([data-theme="dark"]) .nav-tab.active,
+html:not([data-theme="dark"]) .tab-link.active {
+    color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    background-color: rgba(37,99,235,0.08) !important;
+}
+
+/* ── Input / form / footer ── */
+html:not([data-theme="dark"]) input,
+html:not([data-theme="dark"]) select,
+html:not([data-theme="dark"]) textarea,
+html:not([data-theme="dark"]) .footer {
+    background-color: var(--card) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>8D — PHÂN TÍCH ĐỊA LÝ DỰA TRÊN PHẦN DƯ (RESIDUAL)</h1>
+    <p>Đo lường mức độ khó đòi thực sự của từng tỉnh (đã loại trừ nhiễu DPD và Nợ gốc) và dự báo rủi ro bỏ trốn (Skip-tracing) — VNE Risk Management 2026</p>
+</div>
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-label">Tổng Số LOAN ID</div>
+        <div class="kpi-value">155,084</div>
+        <div class="kpi-sub">Đã xác định địa chỉ</div>
+    </div>
+    <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Skip-Trace Tối Cao</div>
+        <div class="kpi-value">0</div>
+        <div class="kpi-sub">Cần truy tìm hiện trường gấp</div>
+    </div>
+    <div class="kpi-card kpi-warn">
+        <div class="kpi-label">Tỉnh Khó Đòi Nhất</div>
+        <div class="kpi-value">TỈNH BÌNH ĐỊNH</div>
+        <div class="kpi-sub">Residual âm sâu nhất</div>
+    </div>
+    <div class="kpi-card kpi-success">
+        <div class="kpi-label">Tỉnh Dễ Thu Hồi Nhất</div>
+        <div class="kpi-value">TỈNH HẢI DƯƠNG</div>
+        <div class="kpi-sub">Residual dương cao nhất</div>
+    </div>
+</div>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="openTab(event, 'tab1')">1. Bản Đồ Residual Địa Lý</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab2')">2. Insight & Skip-Tracing AI</button>
+</div>
+
+<div id="tab1" class="tab-content active">
+    <div class="chart-card">
+        <div>                            <div id="a6cfbf8e-3141-45ef-8cd0-bf34f92ff239" class="plotly-graph-div" style="height:800px; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("a6cfbf8e-3141-45ef-8cd0-bf34f92ff239")) {                    Plotly.newPlot(                        "a6cfbf8e-3141-45ef-8cd0-bf34f92ff239",                        [{"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eResidual: %{y:.3f}%\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935"]},"showlegend":false,"x":["TỈNH BÌNH ĐỊNH","TỈNH PHÚ YÊN","TỈNH BÀ RỊA - VŨNG TÀU","TỈNH THÁI BÌNH","TỈNH THỪA THIÊN HUẾ","TỈNH ĐẮK LẮK","TỈNH NINH THUẬN","TỈNH NGHỆ AN","TỈNH BẠC LIÊU","TỈNH BẾN TRE","TỈNH KIÊN GIANG","TỈNH BÌNH PHƯỚC","TỈNH QUẢNG NGÃI","TỈNH LÂM ĐỒNG","TỈNH HẬU GIANG","TỈNH THANH HÓA","TP. CẦN THƠ","TỈNH GIA LAI","TỈNH AN GIANG","TỈNH BÌNH DƯƠNG","TỈNH TIỀN GIANG","TỈNH LONG AN","TỈNH TÂY NINH","TỈNH ĐỒNG THÁP","TỈNH QUẢNG NAM","TỈNH CÀ MAU","TỈNH BÌNH THUẬN","TỈNH KHÁNH HÒA","TỈNH TRÀ VINH","TP. HẢI PHÒNG","TỈNH ĐỒNG NAI","TP. HUẾ","TỈNH SÓC TRĂNG","TỈNH VĨNH LONG","TP. ĐÀ NẴNG","TP. HỒ CHÍ MINH","TỈNH THÁI NGUYÊN","TỈNH QUẢNG NINH","TỈNH BẮC NINH","TỈNH PHÚ THỌ","TP. HÀ NỘI","TỈNH NINH BÌNH","TỈNH BẮC GIANG","TỈNH HƯNG YÊN","TỈNH VĨNH PHÚC","TỈNH HẢI DƯƠNG"],"xaxis":"x","y":[-54.865,-54.68,-54.378,-53.892,-53.781,-53.524,-53.393,-53.101,-52.852,-52.592,-52.573,-51.865,-51.86,-51.592,-51.525,-51.29,-51.216,-50.853,-50.842,-50.626,-50.468,-50.446,-50.342,-50.312,-50.222,-49.869,-49.855,-49.769,-49.738,-49.282,-49.268,-49.029,-49.009,-48.808,-48.139,-48.117,-47.848,-47.777,-47.464,-47.371,-47.108,-47.057,-46.981,-46.979,-46.895,-46.859],"yaxis":"y","type":"bar"},{"marker":{"color":"#E53935"},"orientation":"h","showlegend":false,"text":["-54.865%","-54.680%","-54.378%","-53.892%","-53.781%","-53.524%","-53.393%","-53.101%","-52.852%","-52.592%"],"textposition":"outside","x":[-54.865,-54.68,-54.378,-53.892,-53.781,-53.524,-53.393,-53.101,-52.852,-52.592],"xaxis":"x2","y":["TỈNH BÌNH ĐỊNH","TỈNH PHÚ YÊN","TỈNH BÀ RỊA - VŨNG TÀU","TỈNH THÁI BÌNH","TỈNH THỪA THIÊN HUẾ","TỈNH ĐẮK LẮK","TỈNH NINH THUẬN","TỈNH NGHỆ AN","TỈNH BẠC LIÊU","TỈNH BẾN TRE"],"yaxis":"y2","type":"bar"},{"marker":{"color":"#43A047"},"orientation":"h","showlegend":false,"text":["+-47.848%","+-47.777%","+-47.464%","+-47.371%","+-47.108%","+-47.057%","+-46.981%","+-46.979%","+-46.895%","+-46.859%"],"textposition":"outside","x":[-47.848,-47.777,-47.464,-47.371,-47.108,-47.057,-46.981,-46.979,-46.895,-46.859],"xaxis":"x3","y":["TỈNH THÁI NGUYÊN","TỈNH QUẢNG NINH","TỈNH BẮC NINH","TỈNH PHÚ THỌ","TP. HÀ NỘI","TỈNH NINH BÌNH","TỈNH BẮC GIANG","TỈNH HƯNG YÊN","TỈNH VĨNH PHÚC","TỈNH HẢI DƯƠNG"],"yaxis":"y3","type":"bar"}],                        {"annotations":[{"font":{"size":16},"showarrow":false,"text":"Residual Thu Hồi Theo Tỉnh (Thực Tế − Dự Báo)","x":0.5,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Phân Bổ Hồ Sơ Tỉnh","x":0.225,"xanchor":"center","xref":"paper","y":0.425,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Top 10 Khó Đòi Nhất","x":0.775,"xanchor":"center","xref":"paper","y":0.425,"yanchor":"bottom","yref":"paper"}],"height":800,"margin":{"b":50,"l":40,"r":40,"t":50},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","shapes":[{"line":{"color":"#FDD835","dash":"dash"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":0,"y1":0,"yref":"y"}],"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0]},"yaxis":{"anchor":"x","domain":[0.575,1.0]},"xaxis2":{"anchor":"y2","domain":[0.0,0.45]},"yaxis2":{"anchor":"x2","domain":[0.0,0.425]},"xaxis3":{"anchor":"y3","domain":[0.55,1.0]},"yaxis3":{"anchor":"x3","domain":[0.0,0.425]}},                        {"responsive": true}                    )                };                            </script>        </div>
+    </div>
+</div>
+
+<div id="tab2" class="tab-content">
+    <div class="chart-card" style="padding: 30px;">
+        <h3 style="margin-top:0; color:var(--primary); margin-bottom: 24px;">💡 Chiến Lược Địa Phương Khóa & Truy Tìm</h3>
+        <div class="alert-box alert-danger"><strong>🔴 Điểm nóng khó đòi (TỈNH BÌNH ĐỊNH):</strong> Tỉnh này có mức thu hồi thấp hơn mô hình dự báo đáng kể. Yêu cầu rà soát lại năng lực Agency tại địa phương hoặc chuyển giao Pháp lý sớm.</div><div class="alert-box alert-success"><strong>✅ Mức độ tin cậy mô hình:</strong> Residual đã loại trừ độ khó của DPD và Nợ gốc. Do đó, các tỉnh có residual âm là thực sự kém hiệu quả do yếu tố ngoại cảnh (kinh tế địa phương, văn hóa, hoặc Agency).</div>
+    </div>
+</div>
+
+<script>
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+    }
+    tablinks = document.getElementsByClassName("tab-btn");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+    window.dispatchEvent(new Event('resize'));
+}
+
+// Theme sync listener (f-string format)
+(function() {
+    function updatePlotlyTheme(isDark) {
+        const textCol = isDark ? '#F1F5F9' : '#0F172A';
+        const gridCol = isDark ? '#334155' : '#E2E8F0';
+        const titleCol = isDark ? '#94A3B8' : '#64748B';
+        
+        document.querySelectorAll('.plotly-graph-div').forEach(div => {
+            try {
+                Plotly.relayout(div, {
+                    'paper_bgcolor': 'rgba(0,0,0,0)',
+                    'plot_bgcolor': 'rgba(0,0,0,0)',
+                    'font.color': textCol,
+                    'title.font.color': titleCol,
+                    'xaxis.gridcolor': gridCol,
+                    'yaxis.gridcolor': gridCol,
+                    'xaxis.tickfont.color': textCol,
+                    'yaxis.tickfont.color': textCol,
+                    'xaxis.zerolinecolor': gridCol,
+                    'yaxis.zerolinecolor': gridCol
+                });
+            } catch(e) {}
+        });
+    }
+
+    const theme = localStorage.getItem('vne_theme');
+    const initDark = (theme === 'dark');
+    if (initDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    
+    // Listen for theme sync messages
+    window.addEventListener('message', function(e) {
+        if (e.data && typeof e.data.theme === 'string') {
+            const isDark = (e.data.theme === 'dark');
+            if (isDark) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            setTimeout(() => {
+                updatePlotlyTheme(isDark);
+                window.dispatchEvent(new Event('resize'));
+            }, 50);
+        }
+    });
+    
+    // Request initial theme
+    try {
+        window.parent.postMessage({ type: 'request_theme' }, '*');
+    } catch(e) {}
+    
+    // Initial plotly theme adjustment on DOMContentLoaded
+    window.addEventListener('DOMContentLoaded', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTimeout(() => { updatePlotlyTheme(isDark); }, 500);
+    });
+})();
+</script>
+</body>
+</html>

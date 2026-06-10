@@ -1,0 +1,28 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache & Compiled Code
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data Files (Excluding small metadata if any, but ignoring large datasets is critical)
+*.csv
+*.xlsx
+*.xls
+*.zip
+*.tar.gz
+*.rar
+
+# Logs
+*.log
+data_cleaning.log
+
+# IDEs & System Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

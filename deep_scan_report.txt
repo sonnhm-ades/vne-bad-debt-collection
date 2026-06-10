@@ -1,0 +1,137 @@
+TOTAL ROWS: 244695
+TOTAL COLS: 76
+
+=== COLUMN ANALYSIS (Hidden Potential) ===
+
+COLUMN: SẢN PHẨM
+  - Non-null: 244242 (99.8%)
+  - Unique values: 1812
+  - Top 5 values: {'I. Cash loan': 44265, 'SALPIL': 37984, 'LOAN_PURPOSE_SHOPPING': 28172, 'LOAN_PURPOSE_VEHICLE': 15149, 'Mua sắm': 10419}
+------------------------------
+COLUMN: GIỚI TÍNH
+  - Non-null: 244245 (99.8%)
+  - Unique values: 4
+  - Top 5 values: {'Ông': 133661, 'Bà': 97984, 'Nam': 7620, 'Nữ': 4980}
+------------------------------
+COLUMN: TÌNH TRẠNG VL
+  - Non-null: 243661 (99.6%)
+  - Unique values: 4
+  - Top 5 values: {'LAO ĐỘNG TỰ DO': 93794, 'CHƯA XÁC ĐỊNH': 81990, 'LÀM TẠI DOANH NGHIỆP': 66337, 'LÀM NHÀ NƯỚC': 1540}
+------------------------------
+COLUMN: CHI NHÁNH
+  - Non-null: 244695 (100.0%)
+  - Unique values: 9
+  - Top 5 values: {'KHO': 156299, 'HỒ CHÍ MINH': 72658, 'ĐÀ NẴNG': 13393, 'GĐ': 2033, 'CLOSE CASE': 154}
+------------------------------
+COLUMN: TỈNH TẠM TRÚ
+  - Non-null: 184854 (75.5%)
+  - Unique values: 67
+  - Top 5 values: {'TP. HỒ CHÍ MINH': 32153, 'TỈNH ĐỒNG NAI': 14907, 'TỈNH BÌNH DƯƠNG': 12313, 'TP. HÀ NỘI': 9407, 'TỈNH BẮC NINH': 9228}
+------------------------------
+COLUMN: TỈNH THƯỜNG TRÚ
+  - Non-null: 224652 (91.8%)
+  - Unique values: 134
+  - Top 5 values: {'TP. HỒ CHÍ MINH': 17971, 'TỈNH AN GIANG': 15437, 'TỈNH ĐỒNG NAI': 11652, 'TP. HÀ NỘI': 10236, 'TỈNH ĐỒNG THÁP': 8719}
+------------------------------
+COLUMN: NGÀY GIẢI NGÂN
+  - Non-null: 243980 (99.7%)
+  - Unique values: 7718
+  - Top 5 values: {'0': 3658, '12/12/2022': 572, '16/12/2022': 500, '24/10/2022': 409, '14/11/2022': 406}
+------------------------------
+COLUMN: SỐ TIỀN GIẢI NGÂN
+  - Non-null: 238490 (97.5%)
+  - Unique values: 6331
+  - Top 5 values: {20000000.0: 29557, 30000000.0: 13995, 21100000.0: 12618, 50000000.0: 12349, 40000000.0: 10415}
+------------------------------
+COLUMN: MỨC LƯƠNG
+  - Non-null: 66901 (27.3%)
+  - Unique values: 2595
+  - Top 5 values: {0.0: 10076, 15000000.0: 9451, 12000000.0: 6314, 10000000.0: 5420, 20000000.0: 5369}
+------------------------------
+COLUMN: SỐ KỲ
+  - Non-null: 209419 (85.6%)
+  - Unique values: 56
+  - Top 5 values: {24.0: 70771, 36.0: 62255, 48.0: 20367, 12.0: 17899, 18.0: 12506}
+------------------------------
+COLUMN: SỐ KỲ ĐÃ TT
+  - Non-null: 203730 (83.3%)
+  - Unique values: 121
+  - Top 5 values: {1.0: 21280, 2.0: 17486, 3.0: 16129, 0.0: 14890, 4.0: 13110}
+------------------------------
+COLUMN: SỐ TIỀN THANH TOÁN HÀNG THÁNG
+  - Non-null: 221966 (90.7%)
+  - Unique values: 87476
+  - Top 5 values: {0.0: 6264, 1415000.0: 3222, 1438000.0: 2073, 2557000.0: 1212, 1403000.0: 891}
+------------------------------
+COLUMN: LÃI QUÁ HẠN
+  - Non-null: 204060 (83.4%)
+  - Unique values: 149953
+  - Top 5 values: {0.0: 19256, 830205.0: 69, 200000.0: 65, 866301.0: 54, 861093.0: 54}
+------------------------------
+COLUMN: PHÍ PHẠT
+  - Non-null: 88649 (36.2%)
+  - Unique values: 5536
+  - Top 5 values: {0.0: 81854, 900000.0: 14, 200000.0: 13, 1400000.0: 11, 1600000.0: 11}
+------------------------------
+COLUMN: NGÀY TT GẦN NHẤT
+  - Non-null: 211036 (86.2%)
+  - Unique values: 42117
+  - Top 5 values: {'0': 4105, '(blank)': 2170, '0//0': 1345, '15/03/2023': 846, '15/04/2023': 833}
+------------------------------
+COLUMN: SỐ TIỀN TT GẦN NHẤT
+  - Non-null: 212108 (86.7%)
+  - Unique values: 32318
+  - Top 5 values: {0.0: 8994, 1000000.0: 3892, 2000000.0: 2823, 1000.0: 2289, 500000.0: 2286}
+------------------------------
+COLUMN: KẾT QUẢ
+  - Non-null: 3341 (1.4%)
+  - Unique values: 502
+  - Top 5 values: {2000000.0: 579, 1000000.0: 539, 500000.0: 294, 3000000.0: 222, 1500000.0: 191}
+------------------------------
+COLUMN: NGÀY CÓ KẾT QUẢ 
+  - Non-null: 3313 (1.4%)
+  - Unique values: 90
+  - Top 5 values: {46063.0: 163, 46091.0: 146, 46037.0: 100, 46112.0: 91, 46052.0: 88}
+------------------------------
+COLUMN: MÃ TÌNH TRẠNG LIÊN HỆ
+  - Non-null: 79416 (32.5%)
+  - Unique values: 28
+  - Top 5 values: {'CBACK': 41772, 'NCON': 24906, 'NSP': 2577, 'NEGO': 2516, 'PAID': 2336}
+------------------------------
+COLUMN: HỒ SƠ KHỞI KIỆN
+  - Non-null: 4969 (2.0%)
+  - Unique values: 2
+  - Top 5 values: {False: 3995, True: 974}
+------------------------------
+COLUMN: DỰ ÁN
+  - Non-null: 244695 (100.0%)
+  - Unique values: 9
+  - Top 5 values: {'SVFC': 54340, 'SHB': 52730, 'HANMIR - LOTTE': 32723, 'LOTTE': 31339, 'MC': 18900}
+------------------------------
+COLUMN: KHÁCH HÀNG NHIỀU DỰ ÁN
+  - Non-null: 152904 (62.5%)
+  - Unique values: 66
+  - Top 5 values: {'0': 148996, 'SHB_SVFC': 361, 'SVFC_HANMIR-LOTTE': 332, 'SHB_HANMIRM-LOTTE': 263, 'LOTTE_SHB': 243}
+------------------------------
+COLUMN: VNE LAW PL 01
+  - Non-null: 243672 (99.6%)
+  - Unique values: 3
+  - Top 5 values: {'NEW': 117985, 'KEEP': 69056, 'KHO': 56631}
+------------------------------
+COLUMN: VNE LAW PL 02
+  - Non-null: 243670 (99.6%)
+  - Unique values: 29
+  - Top 5 values: {'ROTATE.01.26': 121032, 'KHO': 56631, 'ROTATE.03.26': 29234, 'ROTATE.02.26': 16937, 'ROTATE.11.25': 9894}
+------------------------------
+
+=== DATA LOGIC AUDIT (Conflict Detection) ===
+
+1. Lỗi ngược thời gian (Ngày VNE thu < Ngày Ngân hàng thu): 0 hồ sơ
+2. Lỗi có tiền thu về (KẾT QUẢ > 0) nhưng trống NGÀY CÓ KẾT QUẢ: 28 hồ sơ
+   - Danh sách LOAN ID lỗi: ['APL011694719', 'APL011497308', 'APL011590385', 'APL011498343', 'APL011698502', 'APL011755769', 'APL011386337', 'APL011405126', '931013841058', '1371900114010']
+3. Lỗi không có tiền (KẾT QUẢ = 0) nhưng lại có NGÀY CÓ KẾT QUẢ: 0 hồ sơ
+
+4. Kiểm tra lỗi định dạng ngày tháng (Tỷ lệ phân tích thất bại):
+   - Cột NGÀY GIẢI NGÂN: Lỗi định dạng 13390 / 243980 hồ sơ có chữ
+   - Cột NGÀY TT GẦN NHẤT: Lỗi định dạng 15089 / 211036 hồ sơ có chữ
+   - Cột NGÀY CÓ KẾT QUẢ : Lỗi định dạng 0 / 3313 hồ sơ có chữ

@@ -209,7 +209,7 @@ def run():
                                line=dict(color='#38BDF8', width=3)), row=1, col=1)
     fig1.add_trace(go.Scatter(x=pd.concat([km_all['Time'], km_all['Time'][::-1]]),
                                y=pd.concat([km_all['CI_high'], km_all['CI_low'][::-1]]),
-                               fill='toself', fillcolor='rgba(56,189,248,0.1)', line=dict(color='transparent'),
+                               fill='toself', fillcolor='rgba(56,189,248,0.1)', line=dict(color='rgba(0,0,0,0)'),
                                name='95% CI', showlegend=True), row=1, col=1)
     for tval, slbl in [(t50, 'T₅₀'), (t25, 'T₂₅'), (t10, 'T₁₀')]:
         if not np.isnan(tval):
@@ -476,6 +476,13 @@ function openTab(evt, tabName) {{
     try {{ window.parent.postMessage({{ type: 'request_theme' }}, '*'); }} catch(e) {{}}
     window.addEventListener('DOMContentLoaded', () => {{
         setTimeout(() => {{ updatePlotlyTheme(document.documentElement.getAttribute('data-theme') === 'dark'); }}, 500);
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 200);
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 600);
+    }});
+    window.addEventListener('load', () => {{
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 100);
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 500);
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 1000);
     }});
 }})();
 </script>

@@ -946,6 +946,14 @@ function loadModule(url, btn) {{
         injectModuleTheme(iframe, isDark);
         // Delayed injection to win any race vs the module's own initTheme IIFE
         setTimeout(() => injectModuleTheme(iframe, isDark), 300);
+        // Trigger resize inside iframe to fix Plotly dimensions
+        try {{ iframe.contentWindow.dispatchEvent(new Event('resize')); }} catch(e) {{}}
+        setTimeout(() => {{
+            try {{ iframe.contentWindow.dispatchEvent(new Event('resize')); }} catch(e) {{}}
+        }}, 300);
+        setTimeout(() => {{
+            try {{ iframe.contentWindow.dispatchEvent(new Event('resize')); }} catch(e) {{}}
+        }}, 800);
     }};
     iframe.src = url;
 }}
@@ -975,6 +983,11 @@ function initTheme() {{
     const btn = document.getElementById('mode-btn');
     if (btn) btn.textContent = isDark ? '☀️ Light' : '🌙 Mode';
     if (isDark) {{ setTimeout(() => updateCharts(true), 500); }}
+    // Safe fallback resize dispatch on window load
+    window.addEventListener('load', () => {{
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 200);
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 800);
+    }});
 }}
 initTheme();
 

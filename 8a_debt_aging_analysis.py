@@ -398,7 +398,7 @@ body {{ font-family: 'Inter', sans-serif; background: var(--bg); color: var(--te
            VNE Light Mode — Injected for theme sync
            Activates when parent sends 'light' theme (data-theme is removed)
            =================================================================== */
-        :root:not([data-theme="dark"]) {
+        :root:not([data-theme="dark"]) {{
             /* Variable Overrides */
             --bg: #F8FAFC !important;
             --card: #FFFFFF !important;
@@ -418,13 +418,13 @@ body {{ font-family: 'Inter', sans-serif; background: var(--bg); color: var(--te
             --warning: #F59E0B !important;
             --warn: #F59E0B !important;
             --info: #06B6D4 !important;
-        }
+        }}
 
         /* Force light mode backgrounds overriding native dark CSS */
-        html:not([data-theme="dark"]) body {
+        html:not([data-theme="dark"]) body {{
             background-color: var(--bg) !important;
             color: var(--text) !important;
-        }
+        }}
 
         html:not([data-theme="dark"]) .card,
         html:not([data-theme="dark"]) .kpi-card,
@@ -438,88 +438,88 @@ body {{ font-family: 'Inter', sans-serif; background: var(--bg); color: var(--te
         html:not([data-theme="dark"]) .analysis-card,
         html:not([data-theme="dark"]) .header,
         html:not([data-theme="dark"]) [class*="-card"],
-        html:not([data-theme="dark"]) [class*="card-"] {
+        html:not([data-theme="dark"]) [class*="card-"] {{
             background-color: var(--card) !important;
             border-color: var(--border) !important;
             color: var(--text) !important;
-        }
+        }}
 
         html:not([data-theme="dark"]) h1,
         html:not([data-theme="dark"]) h2,
         html:not([data-theme="dark"]) h3,
         html:not([data-theme="dark"]) h4,
         html:not([data-theme="dark"]) h5,
-        html:not([data-theme="dark"]) h6 {
+        html:not([data-theme="dark"]) h6 {{
             color: var(--text) !important;
-        }
+        }}
 
         html:not([data-theme="dark"]) p,
         html:not([data-theme="dark"]) span:not([class*="badge"]):not([class*="alert"]):not([class*="kpi"]),
-        html:not([data-theme="dark"]) label {
+        html:not([data-theme="dark"]) label {{
             color: var(--text) !important;
-        }
+        }}
 
         html:not([data-theme="dark"]) small, 
         html:not([data-theme="dark"]) .text-muted,
         html:not([data-theme="dark"]) .kpi-label,
-        html:not([data-theme="dark"]) .kpi-sub { 
+        html:not([data-theme="dark"]) .kpi-sub {{ 
             color: var(--muted) !important; 
-        }
+        }}
 
         /* Tables */
-        html:not([data-theme="dark"]) table { border-color: var(--border) !important; }
-        html:not([data-theme="dark"]) th {
+        html:not([data-theme="dark"]) table {{ border-color: var(--border) !important; }}
+        html:not([data-theme="dark"]) th {{
             background-color: rgba(37,99,235,0.05) !important;
             color: #1E3A8A !important;
             border-color: var(--border) !important;
-        }
-        html:not([data-theme="dark"]) td {
+        }}
+        html:not([data-theme="dark"]) td {{
             border-color: var(--border) !important;
             color: var(--text) !important;
-        }
-        html:not([data-theme="dark"]) tr { border-color: var(--border) !important; }
-        html:not([data-theme="dark"]) tr:nth-child(even) { background-color: rgba(248,250,252,0.8) !important; }
-        html:not([data-theme="dark"]) tr:hover { background-color: rgba(37,99,235,0.05) !important; }
+        }}
+        html:not([data-theme="dark"]) tr {{ border-color: var(--border) !important; }}
+        html:not([data-theme="dark"]) tr:nth-child(even) {{ background-color: rgba(248,250,252,0.8) !important; }}
+        html:not([data-theme="dark"]) tr:hover {{ background-color: rgba(37,99,235,0.05) !important; }}
 
         /* Section headers & dividers */
         html:not([data-theme="dark"]) .section-header,
         html:not([data-theme="dark"]) .header-section,
         html:not([data-theme="dark"]) .tabs,
         html:not([data-theme="dark"]) .divider,
-        html:not([data-theme="dark"]) hr {
+        html:not([data-theme="dark"]) hr {{
             border-color: var(--border) !important;
-        }
+        }}
 
         /* Tabs / navigation */
         html:not([data-theme="dark"]) .tab-btn,
         html:not([data-theme="dark"]) .nav-tab,
-        html:not([data-theme="dark"]) .tab-link {
+        html:not([data-theme="dark"]) .tab-link {{
             color: var(--muted) !important;
             background-color: transparent !important;
-        }
+        }}
         html:not([data-theme="dark"]) .tab-btn:hover,
         html:not([data-theme="dark"]) .nav-tab:hover,
-        html:not([data-theme="dark"]) .tab-link:hover {
+        html:not([data-theme="dark"]) .tab-link:hover {{
             color: var(--text) !important;
             background-color: rgba(0,0,0,0.05) !important;
-        }
+        }}
         html:not([data-theme="dark"]) .tab-btn.active,
         html:not([data-theme="dark"]) .nav-tab.active,
-        html:not([data-theme="dark"]) .tab-link.active {
+        html:not([data-theme="dark"]) .tab-link.active {{
             color: var(--primary) !important;
             border-color: var(--primary) !important;
             background-color: rgba(37,99,235,0.08) !important;
-        }
+        }}
 
         /* Input / form / footer */
         html:not([data-theme="dark"]) input,
         html:not([data-theme="dark"]) select,
         html:not([data-theme="dark"]) textarea,
-        html:not([data-theme="dark"]) .footer {
+        html:not([data-theme="dark"]) .footer {{
             background-color: var(--card) !important;
             color: var(--text) !important;
             border-color: var(--border) !important;
-        }
+        }}
 </style>
 </head>
 <body>
@@ -660,10 +660,18 @@ function openTab(evt, tabName) {{
         window.parent.postMessage({{ type: 'request_theme' }}, '*');
     }} catch(e) {{}}
     
-    // Initial plotly theme adjustment on DOMContentLoaded
+    // Initial plotly theme adjustment and resize trigger on DOMContentLoaded
     window.addEventListener('DOMContentLoaded', () => {{
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        setTimeout(() => {{ updatePlotlyTheme(isDark); }}, 500);
+        setTimeout(() => {{ 
+            updatePlotlyTheme(isDark); 
+            window.dispatchEvent(new Event('resize'));
+        }}, 300);
+    }});
+    // Safe fallback resize dispatch on window load
+    window.addEventListener('load', () => {{
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 200);
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 800);
     }});
 }})();
 </script>

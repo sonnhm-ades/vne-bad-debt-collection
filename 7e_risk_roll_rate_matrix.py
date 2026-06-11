@@ -156,7 +156,7 @@ def run():
     band_roll_stats = []
     if month_pairs:
         m1, m2 = month_pairs[-1]
-        pair2 = pivot[[f'{m1}_BAND', f'{m2}_BAND', 'NO_GOC']].dropna(subset=[f'{m1}_BAND', f'{m2}_BAND'])
+        pair2 = pivot[[f'{m1}_BAND', f'{m2}_BAND', 'NỢ GỐC']].dropna(subset=[f'{m1}_BAND', f'{m2}_BAND'])
         pair2.columns = ['FROM_BAND', 'TO_BAND', 'NO_GOC']
         pair2 = pair2[(pair2['FROM_BAND'] != 'Unknown') & (pair2['TO_BAND'] != 'Unknown')]
         pair2['FROM_IDX'] = pair2['FROM_BAND'].map(band_order)

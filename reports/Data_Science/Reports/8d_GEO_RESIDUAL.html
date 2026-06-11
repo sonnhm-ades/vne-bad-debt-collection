@@ -29,8 +29,13 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 .kpi-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
 .kpi-value { font-size: 24px; font-weight: 800; line-height: 1.1; }
 .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 6px; }
-.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); }
-.tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); margin-bottom: 0; }
+.tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 8px; flex-wrap: wrap; }
+.data-table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { background: #0F172A; padding: 10px 12px; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--border); text-align: left; white-space: nowrap; }
+.data-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.data-table tr:hover { background: rgba(56,189,248,0.05); }
 .tab-btn { background: transparent; color: var(--muted); border: none; padding: 10px 16px; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.2s; }
 .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
 .tab-btn.active { background: var(--primary); color: #000; }
@@ -42,134 +47,132 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 .alert-warn { background: rgba(245, 158, 11, 0.1); border-left-color: var(--warn); color: #FCD34D; }
 .alert-success { background: rgba(16, 185, 129, 0.1); border-left-color: var(--success); color: #6EE7B7; }
 
-/* ═══════════════════════════════════════════════════════════════════
-   VNE Light Mode — injected by 8g dashboard theme sync
-   Activates when parent sends 'light' theme (data-theme is removed)
-   ═══════════════════════════════════════════════════════════════════ */
-:root:not([data-theme="dark"]) {
-    /* 8g/8f style variables */
-    --bg: #F8FAFC !important;
-    --card: #FFFFFF !important;
-    --text: #0F172A !important;
-    --border: #E2E8F0 !important;
-    --muted: #64748B !important;
-    --primary: #2563EB !important;
-    --accent: #2563EB !important;
-    
-    /* 8b/7d style variables */
-    --background: #F8FAFC !important;
-    --card-bg: #FFFFFF !important;
-    --text-main: #0F172A !important;
-    --text-muted: #64748B !important;
-    
-    /* shared */
-    --success: #10B981 !important;
-    --danger: #EF4444 !important;
-    --warning: #F59E0B !important;
-    --warn: #F59E0B !important;
-    --info: #06B6D4 !important;
-}
+        /* ===================================================================
+           VNE Light Mode — Injected for theme sync
+           Activates when parent sends 'light' theme (data-theme is removed)
+           =================================================================== */
+        :root:not([data-theme="dark"]) {
+            /* Variable Overrides */
+            --bg: #F8FAFC !important;
+            --card: #FFFFFF !important;
+            --text: #0F172A !important;
+            --border: #E2E8F0 !important;
+            --muted: #64748B !important;
+            --primary: #2563EB !important;
+            --accent: #2563EB !important;
+            
+            --background: #F8FAFC !important;
+            --card-bg: #FFFFFF !important;
+            --text-main: #0F172A !important;
+            --text-muted: #64748B !important;
+            
+            --success: #10B981 !important;
+            --danger: #EF4444 !important;
+            --warning: #F59E0B !important;
+            --warn: #F59E0B !important;
+            --info: #06B6D4 !important;
+        }
 
-/* Force light mode backgrounds overriding native dark CSS */
-html:not([data-theme="dark"]) body {
-    background-color: var(--bg) !important;
-    color: var(--text) !important;
-}
+        /* Force light mode backgrounds overriding native dark CSS */
+        html:not([data-theme="dark"]) body {
+            background-color: var(--bg) !important;
+            color: var(--text) !important;
+        }
 
-html:not([data-theme="dark"]) .card,
-html:not([data-theme="dark"]) .kpi-card,
-html:not([data-theme="dark"]) .section-card,
-html:not([data-theme="dark"]) .chart-card,
-html:not([data-theme="dark"]) .metric-card,
-html:not([data-theme="dark"]) .insight-card,
-html:not([data-theme="dark"]) .stat-card,
-html:not([data-theme="dark"]) .summary-card,
-html:not([data-theme="dark"]) .detail-card,
-html:not([data-theme="dark"]) .analysis-card,
-html:not([data-theme="dark"]) .header,
-html:not([data-theme="dark"]) [class*="-card"],
-html:not([data-theme="dark"]) [class*="card-"] {
-    background-color: var(--card) !important;
-    border-color: var(--border) !important;
-    color: var(--text) !important;
-}
+        html:not([data-theme="dark"]) .card,
+        html:not([data-theme="dark"]) .kpi-card,
+        html:not([data-theme="dark"]) .section-card,
+        html:not([data-theme="dark"]) .chart-card,
+        html:not([data-theme="dark"]) .metric-card,
+        html:not([data-theme="dark"]) .insight-card,
+        html:not([data-theme="dark"]) .stat-card,
+        html:not([data-theme="dark"]) .summary-card,
+        html:not([data-theme="dark"]) .detail-card,
+        html:not([data-theme="dark"]) .analysis-card,
+        html:not([data-theme="dark"]) .header,
+        html:not([data-theme="dark"]) [class*="-card"],
+        html:not([data-theme="dark"]) [class*="card-"] {
+            background-color: var(--card) !important;
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+        }
 
-html:not([data-theme="dark"]) h1,
-html:not([data-theme="dark"]) h2,
-html:not([data-theme="dark"]) h3,
-html:not([data-theme="dark"]) h4,
-html:not([data-theme="dark"]) h5,
-html:not([data-theme="dark"]) h6 {
-    color: var(--text) !important;
-}
+        html:not([data-theme="dark"]) h1,
+        html:not([data-theme="dark"]) h2,
+        html:not([data-theme="dark"]) h3,
+        html:not([data-theme="dark"]) h4,
+        html:not([data-theme="dark"]) h5,
+        html:not([data-theme="dark"]) h6 {
+            color: var(--text) !important;
+        }
 
-html:not([data-theme="dark"]) p,
-html:not([data-theme="dark"]) span:not([class*="badge"]):not([class*="alert"]):not([class*="kpi"]),
-html:not([data-theme="dark"]) label {
-    color: var(--text) !important;
-}
+        html:not([data-theme="dark"]) p,
+        html:not([data-theme="dark"]) span:not([class*="badge"]):not([class*="alert"]):not([class*="kpi"]),
+        html:not([data-theme="dark"]) label {
+            color: var(--text) !important;
+        }
 
-html:not([data-theme="dark"]) small, 
-html:not([data-theme="dark"]) .text-muted,
-html:not([data-theme="dark"]) .kpi-label,
-html:not([data-theme="dark"]) .kpi-sub { 
-    color: var(--muted) !important; 
-}
+        html:not([data-theme="dark"]) small, 
+        html:not([data-theme="dark"]) .text-muted,
+        html:not([data-theme="dark"]) .kpi-label,
+        html:not([data-theme="dark"]) .kpi-sub { 
+            color: var(--muted) !important; 
+        }
 
-/* ── Tables ── */
-html:not([data-theme="dark"]) table { border-color: var(--border) !important; }
-html:not([data-theme="dark"]) th {
-    background-color: rgba(37,99,235,0.05) !important;
-    color: #1E3A8A !important;
-    border-color: var(--border) !important;
-}
-html:not([data-theme="dark"]) td {
-    border-color: var(--border) !important;
-    color: var(--text) !important;
-}
-html:not([data-theme="dark"]) tr { border-color: var(--border) !important; }
-html:not([data-theme="dark"]) tr:nth-child(even) { background-color: rgba(248,250,252,0.8) !important; }
-html:not([data-theme="dark"]) tr:hover { background-color: rgba(37,99,235,0.05) !important; }
+        /* Tables */
+        html:not([data-theme="dark"]) table { border-color: var(--border) !important; }
+        html:not([data-theme="dark"]) th {
+            background-color: rgba(37,99,235,0.05) !important;
+            color: #1E3A8A !important;
+            border-color: var(--border) !important;
+        }
+        html:not([data-theme="dark"]) td {
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+        }
+        html:not([data-theme="dark"]) tr { border-color: var(--border) !important; }
+        html:not([data-theme="dark"]) tr:nth-child(even) { background-color: rgba(248,250,252,0.8) !important; }
+        html:not([data-theme="dark"]) tr:hover { background-color: rgba(37,99,235,0.05) !important; }
 
-/* ── Section headers & dividers ── */
-html:not([data-theme="dark"]) .section-header,
-html:not([data-theme="dark"]) .header-section,
-html:not([data-theme="dark"]) .tabs,
-html:not([data-theme="dark"]) .divider,
-html:not([data-theme="dark"]) hr {
-    border-color: var(--border) !important;
-}
+        /* Section headers & dividers */
+        html:not([data-theme="dark"]) .section-header,
+        html:not([data-theme="dark"]) .header-section,
+        html:not([data-theme="dark"]) .tabs,
+        html:not([data-theme="dark"]) .divider,
+        html:not([data-theme="dark"]) hr {
+            border-color: var(--border) !important;
+        }
 
-/* ── Tabs / navigation ── */
-html:not([data-theme="dark"]) .tab-btn,
-html:not([data-theme="dark"]) .nav-tab,
-html:not([data-theme="dark"]) .tab-link {
-    color: var(--muted) !important;
-    background-color: transparent !important;
-}
-html:not([data-theme="dark"]) .tab-btn:hover,
-html:not([data-theme="dark"]) .nav-tab:hover,
-html:not([data-theme="dark"]) .tab-link:hover {
-    color: var(--text) !important;
-    background-color: rgba(0,0,0,0.05) !important;
-}
-html:not([data-theme="dark"]) .tab-btn.active,
-html:not([data-theme="dark"]) .nav-tab.active,
-html:not([data-theme="dark"]) .tab-link.active {
-    color: var(--primary) !important;
-    border-color: var(--primary) !important;
-    background-color: rgba(37,99,235,0.08) !important;
-}
+        /* Tabs / navigation */
+        html:not([data-theme="dark"]) .tab-btn,
+        html:not([data-theme="dark"]) .nav-tab,
+        html:not([data-theme="dark"]) .tab-link {
+            color: var(--muted) !important;
+            background-color: transparent !important;
+        }
+        html:not([data-theme="dark"]) .tab-btn:hover,
+        html:not([data-theme="dark"]) .nav-tab:hover,
+        html:not([data-theme="dark"]) .tab-link:hover {
+            color: var(--text) !important;
+            background-color: rgba(0,0,0,0.05) !important;
+        }
+        html:not([data-theme="dark"]) .tab-btn.active,
+        html:not([data-theme="dark"]) .nav-tab.active,
+        html:not([data-theme="dark"]) .tab-link.active {
+            color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            background-color: rgba(37,99,235,0.08) !important;
+        }
 
-/* ── Input / form / footer ── */
-html:not([data-theme="dark"]) input,
-html:not([data-theme="dark"]) select,
-html:not([data-theme="dark"]) textarea,
-html:not([data-theme="dark"]) .footer {
-    background-color: var(--card) !important;
-    color: var(--text) !important;
-    border-color: var(--border) !important;
-}
+        /* Input / form / footer */
+        html:not([data-theme="dark"]) input,
+        html:not([data-theme="dark"]) select,
+        html:not([data-theme="dark"]) textarea,
+        html:not([data-theme="dark"]) .footer {
+            background-color: var(--card) !important;
+            color: var(--text) !important;
+            border-color: var(--border) !important;
+        }
 </style>
 </head>
 <body>
@@ -201,22 +204,793 @@ html:not([data-theme="dark"]) .footer {
 </div>
 
 <div class="tabs">
-    <button class="tab-btn active" onclick="openTab(event, 'tab1')">1. Bản Đồ Residual Địa Lý</button>
-    <button class="tab-btn" onclick="openTab(event, 'tab2')">2. Insight & Skip-Tracing AI</button>
+    <button class="tab-btn active" onclick="openTab(event, 'tab1')">1. Residual Theo Tỉnh</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab2')">2. Phân Tích Vùng Miền 🆕</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab3')">3. MGS Ranking & Scatter 🆕</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab4')">4. Bảng Dữ Liệu Chi Tiết 🆕</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab5')">5. Insight & Skip-Tracing AI</button>
 </div>
 
 <div id="tab1" class="tab-content active">
-    <div class="chart-card">
-        <div>                            <div id="a6cfbf8e-3141-45ef-8cd0-bf34f92ff239" class="plotly-graph-div" style="height:800px; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("a6cfbf8e-3141-45ef-8cd0-bf34f92ff239")) {                    Plotly.newPlot(                        "a6cfbf8e-3141-45ef-8cd0-bf34f92ff239",                        [{"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eResidual: %{y:.3f}%\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935"]},"showlegend":false,"x":["TỈNH BÌNH ĐỊNH","TỈNH PHÚ YÊN","TỈNH BÀ RỊA - VŨNG TÀU","TỈNH THÁI BÌNH","TỈNH THỪA THIÊN HUẾ","TỈNH ĐẮK LẮK","TỈNH NINH THUẬN","TỈNH NGHỆ AN","TỈNH BẠC LIÊU","TỈNH BẾN TRE","TỈNH KIÊN GIANG","TỈNH BÌNH PHƯỚC","TỈNH QUẢNG NGÃI","TỈNH LÂM ĐỒNG","TỈNH HẬU GIANG","TỈNH THANH HÓA","TP. CẦN THƠ","TỈNH GIA LAI","TỈNH AN GIANG","TỈNH BÌNH DƯƠNG","TỈNH TIỀN GIANG","TỈNH LONG AN","TỈNH TÂY NINH","TỈNH ĐỒNG THÁP","TỈNH QUẢNG NAM","TỈNH CÀ MAU","TỈNH BÌNH THUẬN","TỈNH KHÁNH HÒA","TỈNH TRÀ VINH","TP. HẢI PHÒNG","TỈNH ĐỒNG NAI","TP. HUẾ","TỈNH SÓC TRĂNG","TỈNH VĨNH LONG","TP. ĐÀ NẴNG","TP. HỒ CHÍ MINH","TỈNH THÁI NGUYÊN","TỈNH QUẢNG NINH","TỈNH BẮC NINH","TỈNH PHÚ THỌ","TP. HÀ NỘI","TỈNH NINH BÌNH","TỈNH BẮC GIANG","TỈNH HƯNG YÊN","TỈNH VĨNH PHÚC","TỈNH HẢI DƯƠNG"],"xaxis":"x","y":[-54.865,-54.68,-54.378,-53.892,-53.781,-53.524,-53.393,-53.101,-52.852,-52.592,-52.573,-51.865,-51.86,-51.592,-51.525,-51.29,-51.216,-50.853,-50.842,-50.626,-50.468,-50.446,-50.342,-50.312,-50.222,-49.869,-49.855,-49.769,-49.738,-49.282,-49.268,-49.029,-49.009,-48.808,-48.139,-48.117,-47.848,-47.777,-47.464,-47.371,-47.108,-47.057,-46.981,-46.979,-46.895,-46.859],"yaxis":"y","type":"bar"},{"marker":{"color":"#E53935"},"orientation":"h","showlegend":false,"text":["-54.865%","-54.680%","-54.378%","-53.892%","-53.781%","-53.524%","-53.393%","-53.101%","-52.852%","-52.592%"],"textposition":"outside","x":[-54.865,-54.68,-54.378,-53.892,-53.781,-53.524,-53.393,-53.101,-52.852,-52.592],"xaxis":"x2","y":["TỈNH BÌNH ĐỊNH","TỈNH PHÚ YÊN","TỈNH BÀ RỊA - VŨNG TÀU","TỈNH THÁI BÌNH","TỈNH THỪA THIÊN HUẾ","TỈNH ĐẮK LẮK","TỈNH NINH THUẬN","TỈNH NGHỆ AN","TỈNH BẠC LIÊU","TỈNH BẾN TRE"],"yaxis":"y2","type":"bar"},{"marker":{"color":"#43A047"},"orientation":"h","showlegend":false,"text":["+-47.848%","+-47.777%","+-47.464%","+-47.371%","+-47.108%","+-47.057%","+-46.981%","+-46.979%","+-46.895%","+-46.859%"],"textposition":"outside","x":[-47.848,-47.777,-47.464,-47.371,-47.108,-47.057,-46.981,-46.979,-46.895,-46.859],"xaxis":"x3","y":["TỈNH THÁI NGUYÊN","TỈNH QUẢNG NINH","TỈNH BẮC NINH","TỈNH PHÚ THỌ","TP. HÀ NỘI","TỈNH NINH BÌNH","TỈNH BẮC GIANG","TỈNH HƯNG YÊN","TỈNH VĨNH PHÚC","TỈNH HẢI DƯƠNG"],"yaxis":"y3","type":"bar"}],                        {"annotations":[{"font":{"size":16},"showarrow":false,"text":"Residual Thu Hồi Theo Tỉnh (Thực Tế − Dự Báo)","x":0.5,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Phân Bổ Hồ Sơ Tỉnh","x":0.225,"xanchor":"center","xref":"paper","y":0.425,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Top 10 Khó Đòi Nhất","x":0.775,"xanchor":"center","xref":"paper","y":0.425,"yanchor":"bottom","yref":"paper"}],"height":800,"margin":{"b":50,"l":40,"r":40,"t":50},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","shapes":[{"line":{"color":"#FDD835","dash":"dash"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":0,"y1":0,"yref":"y"}],"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0]},"yaxis":{"anchor":"x","domain":[0.575,1.0]},"xaxis2":{"anchor":"y2","domain":[0.0,0.45]},"yaxis2":{"anchor":"x2","domain":[0.0,0.425]},"xaxis3":{"anchor":"y3","domain":[0.55,1.0]},"yaxis3":{"anchor":"x3","domain":[0.0,0.425]}},                        {"responsive": true}                    )                };                            </script>        </div>
-    </div>
+    <div class="chart-card"><div>                            <div id="29f567c4-eff5-4e50-8631-712b496cdbf2" class="plotly-graph-div" style="height:800px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("29f567c4-eff5-4e50-8631-712b496cdbf2")) {                    Plotly.newPlot(                        "29f567c4-eff5-4e50-8631-712b496cdbf2",                        [{"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eResidual: %{y:.3f}%\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935","#E53935"]},"showlegend":false,"x":["T\u1ec8NH B\u00ccNH \u0110\u1ecaNH","T\u1ec8NH PH\u00da Y\u00caN","T\u1ec8NH B\u00c0 R\u1ecaA - V\u0168NG T\u00c0U","T\u1ec8NH TH\u00c1I B\u00ccNH","T\u1ec8NH TH\u1eeaA THI\u00caN HU\u1ebe","T\u1ec8NH \u0110\u1eaeK L\u1eaeK","T\u1ec8NH NINH THU\u1eacN","T\u1ec8NH NGH\u1ec6 AN","T\u1ec8NH B\u1ea0C LI\u00caU","T\u1ec8NH B\u1ebeN TRE","T\u1ec8NH KI\u00caN GIANG","T\u1ec8NH B\u00ccNH PH\u01af\u1edaC","T\u1ec8NH QU\u1ea2NG NG\u00c3I","T\u1ec8NH L\u00c2M \u0110\u1ed2NG","T\u1ec8NH H\u1eacU GIANG","T\u1ec8NH THANH H\u00d3A","TP. C\u1ea6N TH\u01a0","T\u1ec8NH GIA LAI","T\u1ec8NH AN GIANG","T\u1ec8NH B\u00ccNH D\u01af\u01a0NG","T\u1ec8NH TI\u1ec0N GIANG","T\u1ec8NH LONG AN","T\u1ec8NH T\u00c2Y NINH","T\u1ec8NH \u0110\u1ed2NG TH\u00c1P","T\u1ec8NH QU\u1ea2NG NAM","T\u1ec8NH C\u00c0 MAU","T\u1ec8NH B\u00ccNH THU\u1eacN","T\u1ec8NH KH\u00c1NH H\u00d2A","T\u1ec8NH TR\u00c0 VINH","TP. H\u1ea2I PH\u00d2NG","T\u1ec8NH \u0110\u1ed2NG NAI","TP. HU\u1ebe","T\u1ec8NH S\u00d3C TR\u0102NG","T\u1ec8NH V\u0128NH LONG","TP. \u0110\u00c0 N\u1eb4NG","TP. H\u1ed2 CH\u00cd MINH","T\u1ec8NH TH\u00c1I NGUY\u00caN","T\u1ec8NH QU\u1ea2NG NINH","T\u1ec8NH B\u1eaeC NINH","T\u1ec8NH PH\u00da TH\u1ecc","TP. H\u00c0 N\u1ed8I","T\u1ec8NH NINH B\u00ccNH","T\u1ec8NH B\u1eaeC GIANG","T\u1ec8NH H\u01afNG Y\u00caN","T\u1ec8NH V\u0128NH PH\u00daC","T\u1ec8NH H\u1ea2I D\u01af\u01a0NG"],"xaxis":"x","y":{"dtype":"f8","bdata":"H4XrUbhuS8DXo3A9CldLwKrx0k1iMEvAGQRWDi3ySsCHFtnO9+NKwFCNl24Sw0rA\u002fKnx0k2ySsCwcmiR7YxKwJMYBFYObUrAsp3vp8ZLSsDTTWIQWElKwB+F61G47knArkfhehTuScCyne+nxstJwDMzMzMzw0nAhetRuB6lScDP91PjpZtJwHe+nxovbUnAsp3vp8ZrScDjpZvEIFBJwJZDi2znO0nADAIrhxY5ScCyne+nxitJwA4tsp3vJ0nAI9v5fmocScCsHFpkO+9IwD0K16Nw7UjA30+Nl27iSMBYObTIdt5IwGq8dJMYpEjA\u002fKnx0k2iSMDByqFFtoNIwP7UeOkmgUjAgZVDi2xnSMBvEoPAyhFIwOXQItv5DkjABoGVQ4vsR8D6fmq8dONHwAisHFpku0fAc2iR7XyvR8Dn+6nx0o1HwJ7vp8ZLh0fAIbByaJF9R8BaZDvfT31HwMP1KFyPckfAy6FFtvNtR8A="},"yaxis":"y","type":"bar"},{"marker":{"color":"#E53935"},"orientation":"h","showlegend":false,"text":["-54.865%","-54.680%","-54.378%","-53.892%","-53.781%","-53.524%","-53.393%","-53.101%","-52.852%","-52.592%"],"textposition":"outside","x":{"dtype":"f8","bdata":"H4XrUbhuS8DXo3A9CldLwKrx0k1iMEvAGQRWDi3ySsCHFtnO9+NKwFCNl24Sw0rA\u002fKnx0k2ySsCwcmiR7YxKwJMYBFYObUrAsp3vp8ZLSsA="},"xaxis":"x2","y":["T\u1ec8NH B\u00ccNH \u0110\u1ecaNH","T\u1ec8NH PH\u00da Y\u00caN","T\u1ec8NH B\u00c0 R\u1ecaA - V\u0168NG T\u00c0U","T\u1ec8NH TH\u00c1I B\u00ccNH","T\u1ec8NH TH\u1eeaA THI\u00caN HU\u1ebe","T\u1ec8NH \u0110\u1eaeK L\u1eaeK","T\u1ec8NH NINH THU\u1eacN","T\u1ec8NH NGH\u1ec6 AN","T\u1ec8NH B\u1ea0C LI\u00caU","T\u1ec8NH B\u1ebeN TRE"],"yaxis":"y2","type":"bar"},{"marker":{"color":"#43A047"},"orientation":"h","showlegend":false,"text":["+-47.848%","+-47.777%","+-47.464%","+-47.371%","+-47.108%","+-47.057%","+-46.981%","+-46.979%","+-46.895%","+-46.859%"],"textposition":"outside","x":{"dtype":"f8","bdata":"BoGVQ4vsR8D6fmq8dONHwAisHFpku0fAc2iR7XyvR8Dn+6nx0o1HwJ7vp8ZLh0fAIbByaJF9R8BaZDvfT31HwMP1KFyPckfAy6FFtvNtR8A="},"xaxis":"x3","y":["T\u1ec8NH TH\u00c1I NGUY\u00caN","T\u1ec8NH QU\u1ea2NG NINH","T\u1ec8NH B\u1eaeC NINH","T\u1ec8NH PH\u00da TH\u1ecc","TP. H\u00c0 N\u1ed8I","T\u1ec8NH NINH B\u00ccNH","T\u1ec8NH B\u1eaeC GIANG","T\u1ec8NH H\u01afNG Y\u00caN","T\u1ec8NH V\u0128NH PH\u00daC","T\u1ec8NH H\u1ea2I D\u01af\u01a0NG"],"yaxis":"y3","type":"bar"}],                        {"annotations":[{"font":{"size":16},"showarrow":false,"text":"Residual Thu H\u1ed3i Theo T\u1ec9nh (Th\u1ef1c T\u1ebf \u2212 D\u1ef1 B\u00e1o)","x":0.5,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Ph\u00e2n B\u1ed5 H\u1ed3 S\u01a1 T\u1ec9nh","x":0.225,"xanchor":"center","xref":"paper","y":0.425,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Top 10 Kh\u00f3 \u0110\u00f2i Nh\u1ea5t","x":0.775,"xanchor":"center","xref":"paper","y":0.425,"yanchor":"bottom","yref":"paper"}],"height":800,"margin":{"b":50,"l":40,"r":40,"t":50},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","shapes":[{"line":{"color":"#FDD835","dash":"dash"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":0,"y1":0,"yref":"y"}],"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0]},"yaxis":{"anchor":"x","domain":[0.575,1.0]},"xaxis2":{"anchor":"y2","domain":[0.0,0.45]},"yaxis2":{"anchor":"x2","domain":[0.0,0.425]},"xaxis3":{"anchor":"y3","domain":[0.55,1.0]},"yaxis3":{"anchor":"x3","domain":[0.0,0.425]}},                        {"responsive": true}                    )                };            </script>        </div></div>
 </div>
 
 <div id="tab2" class="tab-content">
+    <div class="chart-card"><div>                            <div id="6de3c9f1-9e82-4a1f-b045-e940b7ce3b13" class="plotly-graph-div" style="height:450px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("6de3c9f1-9e82-4a1f-b045-e940b7ce3b13")) {                    Plotly.newPlot(                        "6de3c9f1-9e82-4a1f-b045-e940b7ce3b13",                        [{"marker":{"color":["#E53935","#E53935","#E53935","#E53935"]},"showlegend":false,"text":["-48.84%","-48.48%","-48.19%","-45.69%"],"textposition":"outside","x":["CENTRAL_HIGHLAND","SOUTH","MEKONG","NORTH"],"xaxis":"x","y":{"dtype":"f8","bdata":"sp3vp8ZrSMCwcmiR7TxIwNV46SYxGEjA1XjpJjHYRsA="},"yaxis":"y","type":"bar"},{"marker":{"color":"#F59E0B"},"showlegend":false,"text":["0.0%","0.0%","0.0%","0.0%"],"textposition":"outside","x":["CENTRAL_HIGHLAND","SOUTH","MEKONG","NORTH"],"xaxis":"x2","y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="},"yaxis":"y2","type":"bar"}],                        {"annotations":[{"font":{"size":16},"showarrow":false,"text":"Residual Thu H\u1ed3i Theo V\u00f9ng Mi\u1ec1n","x":0.225,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"% Skip-Trace Cao (MGS=3) Theo V\u00f9ng","x":0.775,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"height":450,"margin":{"b":50,"l":40,"r":40,"t":50},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","shapes":[{"line":{"color":"#FDD835","dash":"dash"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":0,"y1":0,"yref":"y"}],"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.45]},"yaxis":{"anchor":"x","domain":[0.0,1.0]},"xaxis2":{"anchor":"y2","domain":[0.55,1.0]},"yaxis2":{"anchor":"x2","domain":[0.0,1.0]}},                        {"responsive": true}                    )                };            </script>        </div></div>
+</div>
+
+<div id="tab3" class="tab-content">
+    <div class="chart-card"><div>                            <div id="e9cc38fa-91cc-4d5d-9244-58fb5bba3b43" class="plotly-graph-div" style="height:500px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("e9cc38fa-91cc-4d5d-9244-58fb5bba3b43")) {                    Plotly.newPlot(                        "e9cc38fa-91cc-4d5d-9244-58fb5bba3b43",                        [{"marker":{"color":"#EF4444"},"orientation":"h","showlegend":false,"text":["0.0%","0.0%","0.0%","0.0%","0.0%","0.0%","0.0%","0.0%","0.0%","0.0%","0.0%","0.0%","0.0%","0.0%","0.0%"],"textposition":"outside","x":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},"xaxis":"x","y":["TP. C\u1ea6N TH\u01a0","TP. HU\u1ebe","TP. H\u00c0 N\u1ed8I","TP. H\u1ea2I PH\u00d2NG","TP. H\u1ed2 CH\u00cd MINH","TP. \u0110\u00c0 N\u1eb4NG","T\u1ec8NH AN GIANG","T\u1ec8NH B\u00c0 R\u1ecaA - V\u0168NG T\u00c0U","T\u1ec8NH B\u00ccNH D\u01af\u01a0NG","T\u1ec8NH B\u00ccNH PH\u01af\u1edaC","T\u1ec8NH B\u00ccNH THU\u1eacN","T\u1ec8NH B\u00ccNH \u0110\u1ecaNH","T\u1ec8NH B\u1ea0C LI\u00caU","T\u1ec8NH B\u1eaeC GIANG","T\u1ec8NH B\u1eaeC NINH"],"yaxis":"y","type":"bar"},{"hovertemplate":"\u003cb\u003e%{text}\u003c\u002fb\u003e\u003cbr\u003eDi C\u01b0 %: %{x:.1f}%\u003cbr\u003eResidual: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":{"dtype":"f8","bdata":"z\u002fdT46WbScDByqFFtoNIwOf7qfHSjUfAarx0kxikSMDl0CLb+Q5IwG8Sg8DKEUjAsp3vp8ZrScCq8dJNYjBLwOOlm8QgUEnAH4XrUbjuScA9CtejcO1IwB+F61G4bkvAkxgEVg5tSsAhsHJokX1HwAisHFpku0fAsp3vp8ZLSsCsHFpkO+9IwHe+nxovbUnAWmQ73099R8DLoUW2821HwDMzMzMzw0nA30+Nl27iSMDTTWIQWElKwAwCK4cWOUnAsp3vp8bLScCwcmiR7YxKwJ7vp8ZLh0fA\u002fKnx0k2ySsBzaJHtfK9HwNejcD0KV0vAI9v5fmocScCuR+F6FO5JwPp+arx040fA\u002ftR46SaBSMCF61G4HqVJwBkEVg4t8krABoGVQ4vsR8CHFtnO9+NKwJZDi2znO0nAWDm0yHbeSMCyne+nxitJwIGVQ4tsZ0jAw\u002fUoXI9yR8BQjZduEsNKwPyp8dJNokjADi2yne8nScA="},"colorbar":{"title":{"text":"Residual %"},"x":1.02},"colorscale":[[0.0,"rgb(165,0,38)"],[0.1,"rgb(215,48,39)"],[0.2,"rgb(244,109,67)"],[0.3,"rgb(253,174,97)"],[0.4,"rgb(254,224,139)"],[0.5,"rgb(255,255,191)"],[0.6,"rgb(217,239,139)"],[0.7,"rgb(166,217,106)"],[0.8,"rgb(102,189,99)"],[0.9,"rgb(26,152,80)"],[1.0,"rgb(0,104,55)"]],"showscale":true,"size":{"dtype":"f8","bdata":"NDMzMzObYkCuR+F6FC43QFK4HoXrT4BAAAAAAAAQc0CZmZmZmcKbQI\u002fC9Shch2BApHA9CtdrckC4HoXrUbhMQI\u002fC9Shcn4BAj8L1KFxPS0AfhetRuIZkQKRwPQrXo05AUrgehetxQkAqXI\u002fC9chbQK5H4XoUun5AKlyPwvWoWkC4HoXrURhkQJqZmZmZ+UZApHA9CtdzVkD2KFyPwqVcQMzMzMzMvFBAAAAAAADYaUAehetRuA5eQAAAAAAAWG5ANDMzMzNzPUBSuB6F65E9QLgehetRaFBApHA9CteDSkAfhetRuL5iQClcj8L16DZASOF6FK4fbEBcj8L1KKxVQOJ6FK5HyWtAH4XrUbgOZEBI4XoUrgdPQKRwPQrX4zVAmZmZmZlJXECamZmZmVk1QNejcD0K83BAZmZmZmY2UEBSuB6F6xVyQJqZmZmZkWJArkfhehQGYUDXo3A9CvdHQML1KFyPhohAzMzMzMxUbUA="}},"mode":"markers+text","showlegend":false,"text":["TP. C\u1ea6N TH\u01a0","TP. HU\u1ebe","TP. H\u00c0 N\u1ed8I","TP. H\u1ea2I PH\u00d2NG","TP. H\u1ed2 CH\u00cd MINH","TP. \u0110\u00c0 N\u1eb4NG","T\u1ec8NH AN GIANG","T\u1ec8NH B\u00c0 R\u1ecaA - V\u0168NG T\u00c0U","T\u1ec8NH B\u00ccNH D\u01af\u01a0NG","T\u1ec8NH B\u00ccNH PH\u01af\u1edaC","T\u1ec8NH B\u00ccNH THU\u1eacN","T\u1ec8NH B\u00ccNH \u0110\u1ecaNH","T\u1ec8NH B\u1ea0C LI\u00caU","T\u1ec8NH B\u1eaeC GIANG","T\u1ec8NH B\u1eaeC NINH","T\u1ec8NH B\u1ebeN TRE","T\u1ec8NH C\u00c0 MAU","T\u1ec8NH GIA LAI","T\u1ec8NH H\u01afNG Y\u00caN","T\u1ec8NH H\u1ea2I D\u01af\u01a0NG","T\u1ec8NH H\u1eacU GIANG","T\u1ec8NH KH\u00c1NH H\u00d2A","T\u1ec8NH KI\u00caN GIANG","T\u1ec8NH LONG AN","T\u1ec8NH L\u00c2M \u0110\u1ed2NG","T\u1ec8NH NGH\u1ec6 AN","T\u1ec8NH NINH B\u00ccNH","T\u1ec8NH NINH THU\u1eacN","T\u1ec8NH PH\u00da TH\u1ecc","T\u1ec8NH PH\u00da Y\u00caN","T\u1ec8NH QU\u1ea2NG NAM","T\u1ec8NH QU\u1ea2NG NG\u00c3I","T\u1ec8NH QU\u1ea2NG NINH","T\u1ec8NH S\u00d3C TR\u0102NG","T\u1ec8NH THANH H\u00d3A","T\u1ec8NH TH\u00c1I B\u00ccNH","T\u1ec8NH TH\u00c1I NGUY\u00caN","T\u1ec8NH TH\u1eeaA THI\u00caN HU\u1ebe","T\u1ec8NH TI\u1ec0N GIANG","T\u1ec8NH TR\u00c0 VINH","T\u1ec8NH T\u00c2Y NINH","T\u1ec8NH V\u0128NH LONG","T\u1ec8NH V\u0128NH PH\u00daC","T\u1ec8NH \u0110\u1eaeK L\u1eaeK","T\u1ec8NH \u0110\u1ed2NG NAI","T\u1ec8NH \u0110\u1ed2NG TH\u00c1P"],"textfont":{"size":9},"textposition":"top center","x":{"dtype":"f8","bdata":"MzMzMzMzP0AzMzMzM7M5QM3MzMzMDEBAmpmZmZkZOUBmZmZmZoZRQGZmZmZm5kZAMzMzMzMzMUAAAAAAAMBNQGZmZmZm5lRAMzMzMzNzS0DNzMzMzMwYQDMzMzMzszBAZmZmZmZmUUCamZmZmZkfQGZmZmZmJkpAAAAAAAAAMECamZmZmZkxQAAAAAAAQERAmpmZmZkZRkDNzMzMzMwoQJqZmZmZGTlAAAAAAAAAHkDNzMzMzMw7QM3MzMzMzEFAmpmZmZmZSEBmZmZmZmZFQM3MzMzMzEVAzczMzMzMLUAzMzMzMzNBQGZmZmZmpkNAMzMzMzMzC0CamZmZmZkrQGZmZmZmZi5AmpmZmZmZMUDNzMzMzMw7QGZmZmZmJkNAmpmZmZkZNEDNzMzMzEw+QJqZmZmZmSZAmpmZmZkZOEAAAAAAAABEQAAAAAAAAC1AzczMzMzMHkDNzMzMzExCQJqZmZmZ2UZAMzMzMzOzOEA="},"xaxis":"x2","y":{"dtype":"f8","bdata":"z\u002fdT46WbScDByqFFtoNIwOf7qfHSjUfAarx0kxikSMDl0CLb+Q5IwG8Sg8DKEUjAsp3vp8ZrScCq8dJNYjBLwOOlm8QgUEnAH4XrUbjuScA9CtejcO1IwB+F61G4bkvAkxgEVg5tSsAhsHJokX1HwAisHFpku0fAsp3vp8ZLSsCsHFpkO+9IwHe+nxovbUnAWmQ73099R8DLoUW2821HwDMzMzMzw0nA30+Nl27iSMDTTWIQWElKwAwCK4cWOUnAsp3vp8bLScCwcmiR7YxKwJ7vp8ZLh0fA\u002fKnx0k2ySsBzaJHtfK9HwNejcD0KV0vAI9v5fmocScCuR+F6FO5JwPp+arx040fA\u002ftR46SaBSMCF61G4HqVJwBkEVg4t8krABoGVQ4vsR8CHFtnO9+NKwJZDi2znO0nAWDm0yHbeSMCyne+nxitJwIGVQ4tsZ0jAw\u002fUoXI9yR8BQjZduEsNKwPyp8dJNokjADi2yne8nScA="},"yaxis":"y2","type":"scatter"}],                        {"annotations":[{"font":{"size":16},"showarrow":false,"text":"Top 15 T\u1ec9nh C\u00f3 % MGS=3 Cao Nh\u1ea5t (B\u1ecf Tr\u1ed1n)","x":0.22,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Residual vs % Di C\u01b0 (Scatter)","x":0.78,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"height":500,"margin":{"b":50,"l":40,"r":100,"t":50},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","shapes":[{"line":{"color":"#FDD835","dash":"dash"},"type":"line","x0":0,"x1":1,"xref":"x2 domain","y0":0,"y1":0,"yref":"y2"}],"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.44]},"yaxis":{"anchor":"x","domain":[0.0,1.0]},"xaxis2":{"anchor":"y2","domain":[0.56,1.0]},"yaxis2":{"anchor":"x2","domain":[0.0,1.0]}},                        {"responsive": true}                    )                };            </script>        </div></div>
+</div>
+
+<div id="tab4" class="tab-content">
+    <div class="chart-card">
+        <h3 style="margin:0 0 16px 0; color:var(--primary); font-size:15px;">📋 Bảng Residual Tất Cả Tỉnh (Sắp Xếp Từ Khó → Dễ)</h3>
+        <div class="data-table-wrap">
+        <table class="data-table">
+            <thead><tr>
+                <th>Tỉnh/Thành</th><th>Số HS</th><th>Tỷ Lệ Thực Tế</th>
+                <th>Dự Báo Baseline</th><th>Residual (TT-DB)</th>
+            </tr></thead>
+            <tbody>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÌNH ĐỊNH</td>
+            <td style="text-align:right;">920</td>
+            <td style="text-align:right;">0.4%</td>
+            <td style="text-align:right;">55.3%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-54.865%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH PHÚ YÊN</td>
+            <td style="text-align:right;">224</td>
+            <td style="text-align:right;">0.5%</td>
+            <td style="text-align:right;">55.1%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-54.680%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÀ RỊA - VŨNG TÀU</td>
+            <td style="text-align:right;">640</td>
+            <td style="text-align:right;">0.8%</td>
+            <td style="text-align:right;">55.2%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-54.378%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH THÁI BÌNH</td>
+            <td style="text-align:right;">222</td>
+            <td style="text-align:right;">0.5%</td>
+            <td style="text-align:right;">54.3%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-53.892%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH THỪA THIÊN HUẾ</td>
+            <td style="text-align:right;">261</td>
+            <td style="text-align:right;">0.8%</td>
+            <td style="text-align:right;">54.5%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-53.781%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH ĐẮK LẮK</td>
+            <td style="text-align:right;">554</td>
+            <td style="text-align:right;">1.4%</td>
+            <td style="text-align:right;">55.0%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-53.524%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH NINH THUẬN</td>
+            <td style="text-align:right;">784</td>
+            <td style="text-align:right;">0.4%</td>
+            <td style="text-align:right;">53.8%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-53.393%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH NGHỆ AN</td>
+            <td style="text-align:right;">327</td>
+            <td style="text-align:right;">1.8%</td>
+            <td style="text-align:right;">54.9%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-53.101%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BẠC LIÊU</td>
+            <td style="text-align:right;">460</td>
+            <td style="text-align:right;">1.3%</td>
+            <td style="text-align:right;">54.2%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-52.852%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BẾN TRE</td>
+            <td style="text-align:right;">1,520</td>
+            <td style="text-align:right;">0.9%</td>
+            <td style="text-align:right;">53.5%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-52.592%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH KIÊN GIANG</td>
+            <td style="text-align:right;">1,897</td>
+            <td style="text-align:right;">0.5%</td>
+            <td style="text-align:right;">53.0%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-52.573%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÌNH PHƯỚC</td>
+            <td style="text-align:right;">727</td>
+            <td style="text-align:right;">1.5%</td>
+            <td style="text-align:right;">53.4%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-51.865%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH QUẢNG NGÃI</td>
+            <td style="text-align:right;">1,305</td>
+            <td style="text-align:right;">1.1%</td>
+            <td style="text-align:right;">53.0%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-51.860%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH LÂM ĐỒNG</td>
+            <td style="text-align:right;">311</td>
+            <td style="text-align:right;">3.5%</td>
+            <td style="text-align:right;">55.1%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-51.592%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH HẬU GIANG</td>
+            <td style="text-align:right;">895</td>
+            <td style="text-align:right;">0.6%</td>
+            <td style="text-align:right;">52.1%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-51.525%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH THANH HÓA</td>
+            <td style="text-align:right;">823</td>
+            <td style="text-align:right;">1.2%</td>
+            <td style="text-align:right;">52.5%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-51.290%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. CẦN THƠ</td>
+            <td style="text-align:right;">2,131</td>
+            <td style="text-align:right;">1.3%</td>
+            <td style="text-align:right;">52.5%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-51.216%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH GIA LAI</td>
+            <td style="text-align:right;">555</td>
+            <td style="text-align:right;">1.1%</td>
+            <td style="text-align:right;">51.9%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-50.853%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH AN GIANG</td>
+            <td style="text-align:right;">4,682</td>
+            <td style="text-align:right;">0.9%</td>
+            <td style="text-align:right;">51.8%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-50.842%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÌNH DƯƠNG</td>
+            <td style="text-align:right;">8,260</td>
+            <td style="text-align:right;">0.9%</td>
+            <td style="text-align:right;">51.5%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-50.626%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH TIỀN GIANG</td>
+            <td style="text-align:right;">3,876</td>
+            <td style="text-align:right;">0.6%</td>
+            <td style="text-align:right;">51.1%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-50.468%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH LONG AN</td>
+            <td style="text-align:right;">3,700</td>
+            <td style="text-align:right;">1.1%</td>
+            <td style="text-align:right;">51.5%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-50.446%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH TÂY NINH</td>
+            <td style="text-align:right;">3,586</td>
+            <td style="text-align:right;">1.9%</td>
+            <td style="text-align:right;">52.3%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-50.342%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH ĐỒNG THÁP</td>
+            <td style="text-align:right;">3,535</td>
+            <td style="text-align:right;">0.8%</td>
+            <td style="text-align:right;">51.1%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-50.312%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH QUẢNG NAM</td>
+            <td style="text-align:right;">3,525</td>
+            <td style="text-align:right;">1.2%</td>
+            <td style="text-align:right;">51.4%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-50.222%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH CÀ MAU</td>
+            <td style="text-align:right;">2,228</td>
+            <td style="text-align:right;">0.9%</td>
+            <td style="text-align:right;">50.8%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-49.869%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÌNH THUẬN</td>
+            <td style="text-align:right;">2,641</td>
+            <td style="text-align:right;">0.7%</td>
+            <td style="text-align:right;">50.5%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-49.855%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH KHÁNH HÒA</td>
+            <td style="text-align:right;">3,231</td>
+            <td style="text-align:right;">0.9%</td>
+            <td style="text-align:right;">50.7%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-49.769%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH TRÀ VINH</td>
+            <td style="text-align:right;">999</td>
+            <td style="text-align:right;">0.8%</td>
+            <td style="text-align:right;">50.5%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-49.738%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. HẢI PHÒNG</td>
+            <td style="text-align:right;">3,211</td>
+            <td style="text-align:right;">1.3%</td>
+            <td style="text-align:right;">50.6%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-49.282%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH ĐỒNG NAI</td>
+            <td style="text-align:right;">9,938</td>
+            <td style="text-align:right;">1.4%</td>
+            <td style="text-align:right;">50.7%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-49.268%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. HUẾ</td>
+            <td style="text-align:right;">331</td>
+            <td style="text-align:right;">3.0%</td>
+            <td style="text-align:right;">52.0%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-49.029%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH SÓC TRĂNG</td>
+            <td style="text-align:right;">2,566</td>
+            <td style="text-align:right;">1.2%</td>
+            <td style="text-align:right;">50.3%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-49.009%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH VĨNH LONG</td>
+            <td style="text-align:right;">2,188</td>
+            <td style="text-align:right;">1.2%</td>
+            <td style="text-align:right;">50.0%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-48.808%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. ĐÀ NẴNG</td>
+            <td style="text-align:right;">2,076</td>
+            <td style="text-align:right;">2.1%</td>
+            <td style="text-align:right;">50.3%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-48.139%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. HỒ CHÍ MINH</td>
+            <td style="text-align:right;">21,368</td>
+            <td style="text-align:right;">2.6%</td>
+            <td style="text-align:right;">50.7%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-48.117%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH THÁI NGUYÊN</td>
+            <td style="text-align:right;">1,307</td>
+            <td style="text-align:right;">1.5%</td>
+            <td style="text-align:right;">49.4%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-47.848%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH QUẢNG NINH</td>
+            <td style="text-align:right;">2,350</td>
+            <td style="text-align:right;">1.3%</td>
+            <td style="text-align:right;">49.0%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-47.777%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BẮC NINH</td>
+            <td style="text-align:right;">6,216</td>
+            <td style="text-align:right;">1.1%</td>
+            <td style="text-align:right;">48.6%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-47.464%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH PHÚ THỌ</td>
+            <td style="text-align:right;">1,841</td>
+            <td style="text-align:right;">1.5%</td>
+            <td style="text-align:right;">48.8%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-47.371%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. HÀ NỘI</td>
+            <td style="text-align:right;">5,901</td>
+            <td style="text-align:right;">2.2%</td>
+            <td style="text-align:right;">49.3%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-47.108%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH NINH BÌNH</td>
+            <td style="text-align:right;">761</td>
+            <td style="text-align:right;">2.8%</td>
+            <td style="text-align:right;">49.8%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-47.057%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BẮC GIANG</td>
+            <td style="text-align:right;">1,420</td>
+            <td style="text-align:right;">0.7%</td>
+            <td style="text-align:right;">47.7%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-46.981%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH HƯNG YÊN</td>
+            <td style="text-align:right;">985</td>
+            <td style="text-align:right;">3.1%</td>
+            <td style="text-align:right;">50.1%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-46.979%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH VĨNH PHÚC</td>
+            <td style="text-align:right;">1,746</td>
+            <td style="text-align:right;">1.2%</td>
+            <td style="text-align:right;">48.1%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-46.895%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH HẢI DƯƠNG</td>
+            <td style="text-align:right;">1,497</td>
+            <td style="text-align:right;">0.7%</td>
+            <td style="text-align:right;">47.5%</td>
+            <td style="text-align:right; font-weight:700; color:#EF4444;">-46.859%</td>
+        </tr></tbody>
+        </table></div>
+    </div>
+    <div class="chart-card" style="margin-top:16px;">
+        <h3 style="margin:0 0 16px 0; color:var(--primary); font-size:15px;">🔍 Bảng Migration Gap Score Theo Tỉnh</h3>
+        <div class="data-table-wrap">
+        <table class="data-table">
+            <thead><tr>
+                <th>Tỉnh/Thành</th><th>Số HS</th><th>% MGS=3</th><th>MGS=2 (ct)</th>
+                <th>% Di Cư</th><th>EAD (Tỷ)</th><th>Residual</th>
+            </tr></thead>
+            <tbody>
+        <tr>
+            <td style="font-weight:600;">TP. CẦN THƠ</td>
+            <td style="text-align:right;">2,131</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">664</td>
+            <td style="text-align:right;">31.2%</td>
+            <td style="text-align:right;">46.95 Tỷ</td>
+            <td style="text-align:right;">-51.216%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. HUẾ</td>
+            <td style="text-align:right;">331</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">85</td>
+            <td style="text-align:right;">25.7%</td>
+            <td style="text-align:right;">5.06 Tỷ</td>
+            <td style="text-align:right;">-49.029%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. HÀ NỘI</td>
+            <td style="text-align:right;">5,901</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">1,896</td>
+            <td style="text-align:right;">32.1%</td>
+            <td style="text-align:right;">171.33 Tỷ</td>
+            <td style="text-align:right;">-47.108%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. HẢI PHÒNG</td>
+            <td style="text-align:right;">3,211</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">806</td>
+            <td style="text-align:right;">25.1%</td>
+            <td style="text-align:right;">99.00 Tỷ</td>
+            <td style="text-align:right;">-49.282%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. HỒ CHÍ MINH</td>
+            <td style="text-align:right;">21,368</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">14,976</td>
+            <td style="text-align:right;">70.1%</td>
+            <td style="text-align:right;">589.55 Tỷ</td>
+            <td style="text-align:right;">-48.117%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TP. ĐÀ NẴNG</td>
+            <td style="text-align:right;">2,076</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">951</td>
+            <td style="text-align:right;">45.8%</td>
+            <td style="text-align:right;">41.41 Tỷ</td>
+            <td style="text-align:right;">-48.139%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH AN GIANG</td>
+            <td style="text-align:right;">4,682</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">805</td>
+            <td style="text-align:right;">17.2%</td>
+            <td style="text-align:right;">95.58 Tỷ</td>
+            <td style="text-align:right;">-50.842%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÀ RỊA - VŨNG TÀU</td>
+            <td style="text-align:right;">640</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">381</td>
+            <td style="text-align:right;">59.5%</td>
+            <td style="text-align:right;">16.48 Tỷ</td>
+            <td style="text-align:right;">-54.378%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÌNH DƯƠNG</td>
+            <td style="text-align:right;">8,260</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">6,905</td>
+            <td style="text-align:right;">83.6%</td>
+            <td style="text-align:right;">174.64 Tỷ</td>
+            <td style="text-align:right;">-50.626%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÌNH PHƯỚC</td>
+            <td style="text-align:right;">727</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">399</td>
+            <td style="text-align:right;">54.9%</td>
+            <td style="text-align:right;">15.54 Tỷ</td>
+            <td style="text-align:right;">-51.865%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÌNH THUẬN</td>
+            <td style="text-align:right;">2,641</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">164</td>
+            <td style="text-align:right;">6.2%</td>
+            <td style="text-align:right;">52.07 Tỷ</td>
+            <td style="text-align:right;">-49.855%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BÌNH ĐỊNH</td>
+            <td style="text-align:right;">920</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">154</td>
+            <td style="text-align:right;">16.7%</td>
+            <td style="text-align:right;">17.76 Tỷ</td>
+            <td style="text-align:right;">-54.865%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BẠC LIÊU</td>
+            <td style="text-align:right;">460</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">320</td>
+            <td style="text-align:right;">69.6%</td>
+            <td style="text-align:right;">9.63 Tỷ</td>
+            <td style="text-align:right;">-52.852%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BẮC GIANG</td>
+            <td style="text-align:right;">1,420</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">112</td>
+            <td style="text-align:right;">7.9%</td>
+            <td style="text-align:right;">34.38 Tỷ</td>
+            <td style="text-align:right;">-46.981%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BẮC NINH</td>
+            <td style="text-align:right;">6,216</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">3,248</td>
+            <td style="text-align:right;">52.3%</td>
+            <td style="text-align:right;">161.21 Tỷ</td>
+            <td style="text-align:right;">-47.464%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH BẾN TRE</td>
+            <td style="text-align:right;">1,520</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">238</td>
+            <td style="text-align:right;">16.0%</td>
+            <td style="text-align:right;">32.88 Tỷ</td>
+            <td style="text-align:right;">-52.592%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH CÀ MAU</td>
+            <td style="text-align:right;">2,228</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">393</td>
+            <td style="text-align:right;">17.6%</td>
+            <td style="text-align:right;">50.92 Tỷ</td>
+            <td style="text-align:right;">-49.869%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH GIA LAI</td>
+            <td style="text-align:right;">555</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">225</td>
+            <td style="text-align:right;">40.5%</td>
+            <td style="text-align:right;">12.65 Tỷ</td>
+            <td style="text-align:right;">-50.853%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH HƯNG YÊN</td>
+            <td style="text-align:right;">985</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">435</td>
+            <td style="text-align:right;">44.2%</td>
+            <td style="text-align:right;">27.27 Tỷ</td>
+            <td style="text-align:right;">-46.979%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH HẢI DƯƠNG</td>
+            <td style="text-align:right;">1,497</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">186</td>
+            <td style="text-align:right;">12.4%</td>
+            <td style="text-align:right;">35.53 Tỷ</td>
+            <td style="text-align:right;">-46.859%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH HẬU GIANG</td>
+            <td style="text-align:right;">895</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">225</td>
+            <td style="text-align:right;">25.1%</td>
+            <td style="text-align:right;">19.65 Tỷ</td>
+            <td style="text-align:right;">-51.525%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH KHÁNH HÒA</td>
+            <td style="text-align:right;">3,231</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">243</td>
+            <td style="text-align:right;">7.5%</td>
+            <td style="text-align:right;">66.25 Tỷ</td>
+            <td style="text-align:right;">-49.769%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH KIÊN GIANG</td>
+            <td style="text-align:right;">1,897</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">525</td>
+            <td style="text-align:right;">27.8%</td>
+            <td style="text-align:right;">37.41 Tỷ</td>
+            <td style="text-align:right;">-52.573%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH LONG AN</td>
+            <td style="text-align:right;">3,700</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">1,307</td>
+            <td style="text-align:right;">35.6%</td>
+            <td style="text-align:right;">78.25 Tỷ</td>
+            <td style="text-align:right;">-50.446%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH LÂM ĐỒNG</td>
+            <td style="text-align:right;">311</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">153</td>
+            <td style="text-align:right;">49.2%</td>
+            <td style="text-align:right;">7.15 Tỷ</td>
+            <td style="text-align:right;">-51.592%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH NGHỆ AN</td>
+            <td style="text-align:right;">327</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">140</td>
+            <td style="text-align:right;">42.8%</td>
+            <td style="text-align:right;">7.19 Tỷ</td>
+            <td style="text-align:right;">-53.101%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH NINH BÌNH</td>
+            <td style="text-align:right;">761</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">332</td>
+            <td style="text-align:right;">43.6%</td>
+            <td style="text-align:right;">19.21 Tỷ</td>
+            <td style="text-align:right;">-47.057%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH NINH THUẬN</td>
+            <td style="text-align:right;">784</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">117</td>
+            <td style="text-align:right;">14.9%</td>
+            <td style="text-align:right;">15.01 Tỷ</td>
+            <td style="text-align:right;">-53.393%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH PHÚ THỌ</td>
+            <td style="text-align:right;">1,841</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">634</td>
+            <td style="text-align:right;">34.4%</td>
+            <td style="text-align:right;">47.32 Tỷ</td>
+            <td style="text-align:right;">-47.371%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH PHÚ YÊN</td>
+            <td style="text-align:right;">224</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">88</td>
+            <td style="text-align:right;">39.3%</td>
+            <td style="text-align:right;">4.97 Tỷ</td>
+            <td style="text-align:right;">-54.680%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH QUẢNG NAM</td>
+            <td style="text-align:right;">3,525</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">119</td>
+            <td style="text-align:right;">3.4%</td>
+            <td style="text-align:right;">72.33 Tỷ</td>
+            <td style="text-align:right;">-50.222%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH QUẢNG NGÃI</td>
+            <td style="text-align:right;">1,305</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">180</td>
+            <td style="text-align:right;">13.8%</td>
+            <td style="text-align:right;">26.23 Tỷ</td>
+            <td style="text-align:right;">-51.860%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH QUẢNG NINH</td>
+            <td style="text-align:right;">2,350</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">358</td>
+            <td style="text-align:right;">15.2%</td>
+            <td style="text-align:right;">71.43 Tỷ</td>
+            <td style="text-align:right;">-47.777%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH SÓC TRĂNG</td>
+            <td style="text-align:right;">2,566</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">452</td>
+            <td style="text-align:right;">17.6%</td>
+            <td style="text-align:right;">50.82 Tỷ</td>
+            <td style="text-align:right;">-49.009%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH THANH HÓA</td>
+            <td style="text-align:right;">823</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">229</td>
+            <td style="text-align:right;">27.8%</td>
+            <td style="text-align:right;">18.02 Tỷ</td>
+            <td style="text-align:right;">-51.290%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH THÁI BÌNH</td>
+            <td style="text-align:right;">222</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">85</td>
+            <td style="text-align:right;">38.3%</td>
+            <td style="text-align:right;">4.63 Tỷ</td>
+            <td style="text-align:right;">-53.892%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH THÁI NGUYÊN</td>
+            <td style="text-align:right;">1,307</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">263</td>
+            <td style="text-align:right;">20.1%</td>
+            <td style="text-align:right;">35.05 Tỷ</td>
+            <td style="text-align:right;">-47.848%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH THỪA THIÊN HUẾ</td>
+            <td style="text-align:right;">261</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">79</td>
+            <td style="text-align:right;">30.3%</td>
+            <td style="text-align:right;">4.45 Tỷ</td>
+            <td style="text-align:right;">-53.781%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH TIỀN GIANG</td>
+            <td style="text-align:right;">3,876</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">439</td>
+            <td style="text-align:right;">11.3%</td>
+            <td style="text-align:right;">87.73 Tỷ</td>
+            <td style="text-align:right;">-50.468%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH TRÀ VINH</td>
+            <td style="text-align:right;">999</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">241</td>
+            <td style="text-align:right;">24.1%</td>
+            <td style="text-align:right;">18.95 Tỷ</td>
+            <td style="text-align:right;">-49.738%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH TÂY NINH</td>
+            <td style="text-align:right;">3,586</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">1,434</td>
+            <td style="text-align:right;">40.0%</td>
+            <td style="text-align:right;">93.79 Tỷ</td>
+            <td style="text-align:right;">-50.342%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH VĨNH LONG</td>
+            <td style="text-align:right;">2,188</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">317</td>
+            <td style="text-align:right;">14.5%</td>
+            <td style="text-align:right;">46.85 Tỷ</td>
+            <td style="text-align:right;">-48.808%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH VĨNH PHÚC</td>
+            <td style="text-align:right;">1,746</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">134</td>
+            <td style="text-align:right;">7.7%</td>
+            <td style="text-align:right;">42.73 Tỷ</td>
+            <td style="text-align:right;">-46.895%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH ĐẮK LẮK</td>
+            <td style="text-align:right;">554</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">203</td>
+            <td style="text-align:right;">36.6%</td>
+            <td style="text-align:right;">13.31 Tỷ</td>
+            <td style="text-align:right;">-53.524%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH ĐỒNG NAI</td>
+            <td style="text-align:right;">9,938</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">4,542</td>
+            <td style="text-align:right;">45.7%</td>
+            <td style="text-align:right;">258.94 Tỷ</td>
+            <td style="text-align:right;">-49.268%</td>
+        </tr>
+        <tr>
+            <td style="font-weight:600;">TỈNH ĐỒNG THÁP</td>
+            <td style="text-align:right;">3,535</td>
+            <td style="text-align:right; font-weight:700; color:#10B981;">0.0%</td>
+            <td style="text-align:right;">867</td>
+            <td style="text-align:right;">24.7%</td>
+            <td style="text-align:right;">75.55 Tỷ</td>
+            <td style="text-align:right;">-50.312%</td>
+        </tr></tbody>
+        </table></div>
+    </div>
+</div>
+
+<div id="tab5" class="tab-content">
     <div class="chart-card" style="padding: 30px;">
         <h3 style="margin-top:0; color:var(--primary); margin-bottom: 24px;">💡 Chiến Lược Địa Phương Khóa & Truy Tìm</h3>
         <div class="alert-box alert-danger"><strong>🔴 Điểm nóng khó đòi (TỈNH BÌNH ĐỊNH):</strong> Tỉnh này có mức thu hồi thấp hơn mô hình dự báo đáng kể. Yêu cầu rà soát lại năng lực Agency tại địa phương hoặc chuyển giao Pháp lý sớm.</div><div class="alert-box alert-success"><strong>✅ Mức độ tin cậy mô hình:</strong> Residual đã loại trừ độ khó của DPD và Nợ gốc. Do đó, các tỉnh có residual âm là thực sự kém hiệu quả do yếu tố ngoại cảnh (kinh tế địa phương, văn hóa, hoặc Agency).</div>
     </div>
 </div>
+
 
 <script>
 function openTab(evt, tabName) {
@@ -286,10 +1060,18 @@ function openTab(evt, tabName) {
         window.parent.postMessage({ type: 'request_theme' }, '*');
     } catch(e) {}
     
-    // Initial plotly theme adjustment on DOMContentLoaded
+    // Initial plotly theme adjustment and resize trigger on DOMContentLoaded
     window.addEventListener('DOMContentLoaded', () => {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        setTimeout(() => { updatePlotlyTheme(isDark); }, 500);
+        setTimeout(() => { 
+            updatePlotlyTheme(isDark); 
+            window.dispatchEvent(new Event('resize'));
+        }, 300);
+    });
+    // Safe fallback resize dispatch on window load
+    window.addEventListener('load', () => {
+        setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 200);
+        setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 800);
     });
 })();
 </script>

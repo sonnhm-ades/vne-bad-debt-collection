@@ -732,10 +732,18 @@ function openTab(evt, tabName) {{
         window.parent.postMessage({{ type: 'request_theme' }}, '*');
     }} catch(e) {{}}
     
-    // Initial plotly theme adjustment on DOMContentLoaded
+    // Initial plotly theme adjustment and resize trigger on DOMContentLoaded
     window.addEventListener('DOMContentLoaded', () => {{
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        setTimeout(() => {{ updatePlotlyTheme(isDark); }}, 500);
+        setTimeout(() => {{ 
+            updatePlotlyTheme(isDark); 
+            window.dispatchEvent(new Event('resize'));
+        }}, 300);
+    }});
+    // Safe fallback resize dispatch on window load
+    window.addEventListener('load', () => {{
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 200);
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 800);
     }});
 }})();
 </script>

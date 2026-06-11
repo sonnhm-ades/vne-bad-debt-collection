@@ -340,6 +340,9 @@ def run():
 
     # Chart 2: Horizontal Bar chart - Phân phối Chi tiết Mã Trạng thái (LOAN-LEVEL)
     loan_ma_sorted = loan_ma_counts.sort_values('SỐ_LOAN', ascending=True)
+    loan_ma_sorted['VĂN_BẢN_NHÃN'] = loan_ma_sorted.apply(
+        lambda r: f"{int(r['SỐ_LOAN']):,} HS ({r['%_LOAN']:.2f}%)", axis=1
+    )
     detail_fig = px.bar(
         loan_ma_sorted,
         x='SỐ_LOAN',
@@ -347,23 +350,21 @@ def run():
         color='NHÓM',
         color_discrete_map=GROUP_COLORS,
         orientation='h',
-        text='SỐ_LOAN'
+        text='VĂN_BẢN_NHÃN',
+        custom_data=['NHÓM', '%_LOAN']
     )
     detail_fig.update_traces(
-        texttemplate='%{text:,}',
+        texttemplate='%{text}',
         textposition='outside',
         hovertemplate="<b>%{y}</b><br>Nhóm: %{customdata[0]}<br>Hồ sơ (loan): %{x:,}<br>Tỷ lệ: %{customdata[1]:.2f}% tổng danh mục<extra></extra>"
     )
-    detail_fig.update_traces(
-        customdata=np.stack((loan_ma_sorted['NHÓM'], loan_ma_sorted['%_LOAN']), axis=-1)
-    )
     detail_fig.update_layout(
-        margin=dict(t=10, b=10, l=10, r=10),
+        margin=dict(t=30, b=30, l=180, r=120),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font=dict(family="Inter, Arial, sans-serif", size=11),
-        xaxis=dict(showgrid=True, gridcolor='#E2E8F0', title='Số hồ sơ (Loan ID)'),
-        yaxis=dict(title=''),
+        xaxis=dict(showgrid=True, gridcolor='#E2E8F0', title='Số hồ sơ (Loan ID)', type='linear'),
+        yaxis=dict(title='', automargin=True),
         showlegend=True,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         height=520
@@ -378,7 +379,7 @@ def run():
         textinfo='value+percent initial',
         marker=dict(color=funnel_colors),
         connector=dict(line=dict(color='#CBD5E1', width=1, dash='dot')),
-        hovertemplate="<b>%{label}</b><br>Số hồ sơ: %{value:,}<br>% tổng danh mục: %{percentInitial:.1%}<extra></extra>"
+        hovertemplate="<b>%{y}</b><br>Số hồ sơ: %{x:,}<br>% tổng danh mục: %{percentInitial:.1%}<extra></extra>"
     ))
     funnel_fig.update_layout(
         margin=dict(t=20, b=20, l=20, r=20),
@@ -1483,10 +1484,18 @@ def run():
         window.parent.postMessage({{ type: 'request_theme' }}, '*');
     }} catch(e) {{}}
     
-    // Initial plotly theme adjustment on DOMContentLoaded
+    // Initial plotly theme adjustment and resize trigger on DOMContentLoaded
     window.addEventListener('DOMContentLoaded', () => {{
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        setTimeout(() => {{ updatePlotlyTheme(isDark); }}, 500);
+        setTimeout(() => {{ 
+            updatePlotlyTheme(isDark); 
+            window.dispatchEvent(new Event('resize'));
+        }}, 300);
+    }});
+    // Safe fallback resize dispatch on window load
+    window.addEventListener('load', () => {{
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 200);
+        setTimeout(() => {{ window.dispatchEvent(new Event('resize')); }}, 800);
     }});
 }})();
 </script>
